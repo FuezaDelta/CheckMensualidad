@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta de membresía - Fuerza Delta</title>
+
+    <!-- Fuente base -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Si ya tienes un CSS global de Fuerza Delta, puedes reemplazar/añadir tu archivo aquí -->
+    <style>
+      :root {
+        /* Paleta Fuerza Delta (basada en logo) */
+        --color-bg: #070707;
+        --color-card: #0b0b0b;
+        --color-primary: #6f7f2a; /* verde militar */
+        --color-primary-2: #97a64a; /* verde militar claro */
+        --color-primary-soft: rgba(111, 127, 42, 0.18);
+        --color-danger: #ef4444;
+        --color-text: #f1eadb; /* blanco hueso */
+        --color-text-soft: rgba(241, 234, 219, 0.72);
+        --color-border: rgba(151, 166, 74, 0.28);
+        --radius-lg: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(
+            circle at 15% 10%,
+            rgba(151, 166, 74, 0.18),
+            transparent 45%
+          ),
+          radial-gradient(circle at 85% 15%, rgba(241, 234, 219, 0.08), transparent 55%),
+          radial-gradient(circle at bottom, rgba(151, 166, 74, 0.1), transparent 60%),
+          #050505;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        color: var(--color-text);
+      }
+
+      .app-shell {
+        width: 100%;
+        max-width: 480px;
+        padding: 24px;
+      }
+
+      .card {
+        background: linear-gradient(
+            135deg,
+            rgba(241, 234, 219, 0.08),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at top right,
+            rgba(151, 166, 74, 0.26),
+            transparent 55%
+          ),
+          radial-gradient(circle at 20% 85%, rgba(111, 127, 42, 0.2), transparent 55%),
+          #070707;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-border);
+        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.85);
+        padding: 24px 22px 22px;
+        backdrop-filter: blur(16px);
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .logo-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        object-fit: cover;
+        border: 1px solid rgba(151, 166, 74, 0.55);
+        box-shadow: 0 0 0 3px rgba(151, 166, 74, 0.16),
+          0 16px 40px rgba(0, 0, 0, 0.55);
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .brand-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-text);
+      }
+
+      .brand-subtitle {
+        font-size: 0.8rem;
+        color: var(--color-text-soft);
+      }
+
+      .title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        color: var(--color-text-soft);
+        margin-bottom: 18px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        font-size: 0.85rem;
+        color: var(--color-text-soft);
+      }
+
+      .input-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      input[type="tel"] {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(241, 234, 219, 0.22);
+        background: rgba(8, 8, 8, 0.72);
+        color: var(--color-text);
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease,
+          background-color 0.18s ease;
+      }
+
+      input[type="tel"]::placeholder {
+        color: #6b7280;
+      }
+
+      input[type="tel"]:focus {
+        border-color: rgba(151, 166, 74, 0.85);
+        box-shadow: 0 0 0 1px rgba(151, 166, 74, 0.5);
+        background: rgba(8, 8, 8, 0.88);
+      }
+
+      button {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: linear-gradient(
+          135deg,
+          var(--color-primary-2),
+          var(--color-primary)
+        );
+        color: #060606;
+        box-shadow: 0 16px 40px rgba(151, 166, 74, 0.4);
+        transition: transform 0.14s ease, box-shadow 0.14s ease,
+          filter 0.14s ease;
+        white-space: nowrap;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 22px 55px rgba(151, 166, 74, 0.52);
+        filter: brightness(1.02);
+      }
+
+      button:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 12px 30px rgba(151, 166, 74, 0.35);
+      }
+
+      button:disabled {
+        cursor: progress;
+        opacity: 0.7;
+        box-shadow: none;
+      }
+
+      .button-icon {
+        font-size: 1.05rem;
+      }
+
+      .helper {
+        font-size: 0.78rem;
+        color: var(--color-text-soft);
+        margin-bottom: 4px;
+      }
+
+      .status {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+      }
+
+      .status--info {
+        color: var(--color-text-soft);
+      }
+
+      .status--error {
+        color: var(--color-danger);
+      }
+
+      .resultado {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(8, 8, 8, 0.78);
+        border: 1px solid rgba(241, 234, 219, 0.18);
+        font-size: 0.9rem;
+        display: none;
+      }
+
+      .resultado.visible {
+        display: block;
+      }
+
+      .resultado-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+
+      .resultado-nombre {
+        font-weight: 600;
+      }
+
+      .badge-estado {
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .badge-estado.activa {
+        background: var(--color-primary-soft);
+        color: var(--color-primary);
+        border: 1px solid rgba(151, 166, 74, 0.65);
+      }
+
+      .badge-estado.vencida {
+        background: rgba(239, 68, 68, 0.16);
+        color: var(--color-danger);
+        border: 1px solid rgba(239, 68, 68, 0.7);
+      }
+
+      .resultado-item {
+        font-size: 0.85rem;
+        color: var(--color-text-soft);
+      }
+
+      .resultado-item strong {
+        color: var(--color-text);
+        font-weight: 500;
+      }
+
+      .footnote {
+        margin-top: 10px;
+        font-size: 0.7rem;
+        color: rgba(241, 234, 219, 0.52);
+        text-align: center;
+      }
+
+      @media (max-width: 480px) {
+        .app-shell {
+          padding: 18px;
+        }
+
+        .card {
+          padding: 18px 16px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="card">
+        <header class="card-header">
+          <img
+            src="./assets/logo-fd.jpeg"
+            alt="Fuerza Delta"
+            class="logo-img"
+            loading="lazy"
+          />
+          <div class="brand-text">
+            <div class="brand-title">Fuerza Delta</div>
+            <div class="brand-subtitle">Consulta de membresías</div>
+          </div>
+        </header>
+
+        <h1 class="title">Consulta el estado de tu membresía</h1>
+        <p class="subtitle">
+          Ingresa el número de celular con el que diste de alta tu membresía en
+          el gimnasio.
+        </p>
+
+        <form id="consulta-form">
+          <label for="telefono">Número de celular</label>
+          <div class="input-row">
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              autocomplete="tel"
+              placeholder="Ej. 5551234567"
+              required
+            />
+            <button type="submit" id="btn-consultar">
+              <span class="button-icon">🔍</span>
+              <span>Consultar</span>
+            </button>
+          </div>
+        </form>
+
+        <p id="helper" class="helper">
+          Solo lectura: esta página <strong>no</strong> modifica tu membresía.
+        </p>
+
+        <p id="status" class="status status--info"></p>
+
+        <section id="resultado" class="resultado" aria-live="polite"></section>
+
+        <p class="footnote">
+          Si tienes dudas sobre tu membresía, por favor comunícate directamente
+          con Fuerza Delta.
+        </p>
+      </main>
+    </div>
+
+    <!-- Script principal: módulo ES que se conecta a Firebase/Firestore -->
+    <script type="module" src="./js/consulta.js"></script>
+  </body>
+  </html>
+

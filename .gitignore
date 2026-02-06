@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs y temporales
+*.log
+.env
+.env.local
