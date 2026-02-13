@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Consulta de membresía - Fuerza Delta</title>
 
     <!-- Fuente base -->
@@ -35,11 +35,17 @@
         padding: 0;
       }
 
+      html {
+        overflow-x: hidden;
+      }
+
       body {
         min-height: 100vh;
+        min-height: 100dvh;
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow-x: hidden;
         background: radial-gradient(
             circle at 15% 10%,
             rgba(151, 166, 74, 0.18),
@@ -142,10 +148,12 @@
       .input-row {
         display: flex;
         gap: 8px;
+        min-width: 0;
       }
 
       input[type="tel"] {
         flex: 1;
+        min-width: 0;
         padding: 10px 12px;
         border-radius: 999px;
         border: 1px solid rgba(241, 234, 219, 0.22);
@@ -295,18 +303,253 @@
         text-align: center;
       }
 
+      .footnote-link {
+        color: var(--color-primary-2);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .footnote-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Botón y panel flotante de planes */
+      .btn-planes {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 100;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(241, 234, 219, 0.5);
+        background: linear-gradient(
+          135deg,
+          var(--color-primary-2),
+          var(--color-primary)
+        );
+        color: #060606;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(151, 166, 74, 0.35);
+        transition: transform 0.14s ease, box-shadow 0.14s ease;
+      }
+
+      .btn-planes:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 32px rgba(151, 166, 74, 0.45);
+      }
+
+      .btn-planes-icon {
+        font-size: 1.1rem;
+      }
+
+      .panel-planes {
+        position: fixed;
+        top: 64px;
+        right: 20px;
+        z-index: 99;
+        width: min(340px, calc(100vw - 40px));
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          rgba(11, 11, 11, 0.98),
+          rgba(7, 7, 7, 0.98)
+        );
+        border: 1px solid var(--color-border);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(16px);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+      }
+
+      .panel-planes.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .panel-planes-inner {
+        padding: 16px;
+      }
+
+      .panel-planes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .panel-planes-titulo {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      .panel-planes-cerrar {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--color-text-soft);
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+
+      .panel-planes-cerrar:hover {
+        background: rgba(241, 234, 219, 0.1);
+        color: var(--color-text);
+      }
+
+      .panel-planes-lista {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .panel-planes-cargando,
+      .panel-planes-error {
+        font-size: 0.85rem;
+        color: var(--color-text-soft);
+      }
+
+      .panel-planes-error {
+        color: var(--color-danger);
+      }
+
+      .panel-plan-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(8, 8, 8, 0.6);
+        border: 1px solid rgba(241, 234, 219, 0.12);
+      }
+
+      .panel-plan-item .nombre {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text);
+      }
+
+      .panel-plan-item .precio-dias {
+        font-size: 0.85rem;
+        color: var(--color-primary-2);
+        font-weight: 500;
+      }
+
+      /* Tablet / móvil grande */
       @media (max-width: 480px) {
+        body {
+          align-items: flex-start;
+          justify-content: flex-start;
+        }
+
         .app-shell {
-          padding: 18px;
+          padding: 20px 16px 24px;
+          padding-top: 88px;
+          padding-top: max(88px, env(safe-area-inset-top, 0px) + 60px);
+          max-width: 100%;
         }
 
         .card {
-          padding: 18px 16px 16px;
+          padding: 20px 18px 20px;
+        }
+
+        .input-row {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .input-row input[type="tel"] {
+          width: 100%;
+        }
+
+        #btn-consultar {
+          width: 100%;
+        }
+
+        .btn-planes {
+          top: max(12px, env(safe-area-inset-top, 0px));
+          right: max(12px, env(safe-area-inset-right, 0px));
+          padding: 10px 16px;
+          font-size: 0.85rem;
+        }
+
+        .panel-planes {
+          top: max(56px, env(safe-area-inset-top, 0px) + 48px);
+          right: max(12px, env(safe-area-inset-right, 0px));
+          left: max(12px, env(safe-area-inset-left, 0px));
+          width: auto;
+        }
+      }
+
+      /* Móvil pequeño (ej. 320–360px) */
+      @media (max-width: 380px) {
+        .app-shell {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        .card {
+          padding: 16px 14px 16px;
+        }
+
+        .title {
+          font-size: 1.05rem;
+        }
+
+        .subtitle {
+          font-size: 0.85rem;
+        }
+
+        .btn-planes {
+          padding: 8px 14px;
+          font-size: 0.8rem;
+        }
+
+        .panel-plan-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
         }
       }
     </style>
   </head>
   <body>
+    <!-- Botón flotante Planes -->
+    <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
+      <span class="btn-planes-icon">💪</span>
+      <span>Planes</span>
+    </button>
+
+    <!-- Panel flotante de planes disponibles -->
+    <div id="panel-planes" class="panel-planes" role="dialog" aria-labelledby="panel-planes-titulo" aria-hidden="true">
+      <div class="panel-planes-inner">
+        <div class="panel-planes-header">
+          <h2 id="panel-planes-titulo" class="panel-planes-titulo">Planes disponibles</h2>
+          <button type="button" id="btn-cerrar-planes" class="panel-planes-cerrar" aria-label="Cerrar">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div id="panel-planes-lista" class="panel-planes-lista">
+          <p class="panel-planes-cargando">Cargando planes…</p>
+        </div>
+      </div>
+    </div>
+
     <div class="app-shell">
       <main class="card">
         <header class="card-header">
@@ -356,7 +599,7 @@
 
         <p class="footnote">
           Si tienes dudas sobre tu membresía, por favor comunícate directamente
-          con Fuerza Delta.
+          con Fuerza Delta al <b>WhatsApp <a href="https://wa.me/573012796566" target="_blank" rel="noopener noreferrer" class="footnote-link">3012796566</a>.</b>
         </p>
       </main>
     </div>

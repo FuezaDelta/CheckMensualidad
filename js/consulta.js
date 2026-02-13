@@ -45,28 +45,32 @@ function formatearFecha(fechaFirestore) {
 }
 
 function estadoEsActiva(estadoMembresia, fechaFin) {
-  // Si ya tienes un campo `estadoMembresia` tipo "activa"/"vencida", usamos eso.
+  // La fecha de vencimiento es la fuente de verdad: si existe, decidimos por ella
+  if (fechaFin) {
+    let fecha;
+    if (typeof fechaFin.toDate === "function") {
+      fecha = fechaFin.toDate();
+    } else {
+      fecha = new Date(fechaFin);
+    }
+
+    if (!Number.isNaN(fecha.getTime())) {
+      const hoyInicio = new Date();
+      hoyInicio.setHours(0, 0, 0, 0);
+      const vencimientoInicio = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+      // Activa solo si la fecha de vencimiento es hoy o en el futuro (el día de vencimiento aún cuenta como activa)
+      return vencimientoInicio >= hoyInicio;
+    }
+  }
+
+  // Si no hay fecha válida, usar estado guardado en BD como respaldo
   if (typeof estadoMembresia === "string") {
     const e = estadoMembresia.trim().toLowerCase();
     if (e === "activa" || e === "activo") return true;
     if (e === "vencida" || e === "vencido") return false;
   }
 
-  // Como respaldo, evaluamos por fecha de vencimiento si existe
-  if (!fechaFin) return false;
-
-  let fecha;
-  if (typeof fechaFin.toDate === "function") {
-    fecha = fechaFin.toDate();
-  } else {
-    fecha = new Date(fechaFin);
-  }
-
-  if (Number.isNaN(fecha.getTime())) return false;
-
-  const hoy = new Date();
-  // Consideramos "activa" si la fechaFin es hoy o en el futuro
-  return fecha >= new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+  return false;
 }
 
 // Referencias al DOM
@@ -95,10 +99,12 @@ function limpiarResultado() {
 function mostrarResultado(usuario) {
   const {
     nombre = "Usuario",
+    apellido,
     estadoMembresia,
     fechaFinMembresia,
-    telefono,
   } = usuario;
+
+  const nombreCompleto = [nombre, apellido].filter(Boolean).join(" ").trim() || nombre;
 
   const activa = estadoEsActiva(estadoMembresia, fechaFinMembresia);
   const textoEstado = activa ? "ACTIVA" : "VENCIDA";
@@ -107,14 +113,11 @@ function mostrarResultado(usuario) {
 
   resultadoEl.innerHTML = `
     <div class="resultado-header">
-      <div class="resultado-nombre">${nombre}</div>
+      <div class="resultado-nombre">${nombreCompleto}</div>
       <span class="badge-estado ${claseEstado}">
         ${textoEstado}
       </span>
     </div>
-    <p class="resultado-item">
-      <strong>Teléfono:</strong> ${telefono || "No registrado"}
-    </p>
     <p class="resultado-item">
       <strong>Fecha de vencimiento:</strong> ${fechaFormateada}
     </p>
@@ -169,6 +172,97 @@ async function consultarPorTelefono(event) {
 }
 
 form.addEventListener("submit", consultarPorTelefono);
+
+// --- Panel flotante de planes (desde Firestore) ---
+const btnPlanes = document.getElementById("btn-planes");
+const panelPlanes = document.getElementById("panel-planes");
+const panelPlanesLista = document.getElementById("panel-planes-lista");
+const btnCerrarPlanes = document.getElementById("btn-cerrar-planes");
+
+function formatearPrecio(num) {
+  if (num == null || Number.isNaN(Number(num))) return "—";
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  }).format(Number(num));
+}
+
+function abrirPanelPlanes() {
+  panelPlanes.classList.add("visible");
+  panelPlanes.setAttribute("aria-hidden", "false");
+  btnPlanes.setAttribute("aria-expanded", "true");
+  cargarPlanes();
+}
+
+function cerrarPanelPlanes() {
+  panelPlanes.classList.remove("visible");
+  panelPlanes.setAttribute("aria-hidden", "true");
+  btnPlanes.setAttribute("aria-expanded", "false");
+}
+
+async function cargarPlanes() {
+  panelPlanesLista.innerHTML = '<p class="panel-planes-cargando">Cargando planes…</p>';
+
+  try {
+    const colRef = collection(db, "planes");
+    const q = query(colRef, where("activo", "==", true));
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      panelPlanesLista.innerHTML =
+        '<p class="panel-planes-error">No hay planes disponibles.</p>';
+      return;
+    }
+
+    const items = snap.docs
+      .map((doc) => {
+        const d = doc.data();
+        return {
+          nombre: d.nombre ?? doc.id,
+          precio: d.precio,
+          duracionDias: d.duracionDias ?? 0,
+        };
+      })
+      .sort((a, b) => (a.duracionDias || 0) - (b.duracionDias || 0));
+
+    panelPlanesLista.innerHTML = items
+      .map(
+        (p) => `
+        <div class="panel-plan-item">
+          <span class="nombre">${p.nombre}</span>
+          <span class="precio-dias">${formatearPrecio(p.precio)} ${p.duracionDias} días</span>
+        </div>
+      `
+      )
+      .join("");
+  } catch (err) {
+    console.error("Error al cargar planes:", err);
+    panelPlanesLista.innerHTML =
+      '<p class="panel-planes-error">No se pudieron cargar los planes. Intenta más tarde.</p>';
+  }
+}
+
+btnPlanes.addEventListener("click", () => {
+  if (panelPlanes.classList.contains("visible")) {
+    cerrarPanelPlanes();
+  } else {
+    abrirPanelPlanes();
+  }
+});
+
+btnCerrarPlanes.addEventListener("click", cerrarPanelPlanes);
+
+// Cerrar al hacer clic fuera del panel
+document.addEventListener("click", (e) => {
+  if (
+    panelPlanes.classList.contains("visible") &&
+    !panelPlanes.contains(e.target) &&
+    !btnPlanes.contains(e.target)
+  ) {
+    cerrarPanelPlanes();
+  }
+});
 
 // Mensaje inicial
 setStatus("Escribe tu número de celular y presiona Consultar.", "info");
