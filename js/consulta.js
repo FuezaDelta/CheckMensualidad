@@ -73,13 +73,19 @@ function estadoEsActiva(estadoMembresia, fechaFin) {
   return false;
 }
 
-// Referencias al DOM
+// Referencias al DOM (consulta)
 const form = document.getElementById("consulta-form");
 const inputTel = document.getElementById("telefono");
 const statusEl = document.getElementById("status");
 const helperEl = document.getElementById("helper");
 const resultadoEl = document.getElementById("resultado");
 const btnConsultar = document.getElementById("btn-consultar");
+
+// Referencias al DOM (navegación principal)
+const navConsulta = document.getElementById("nav-consulta");
+const navHorarios = document.getElementById("nav-horarios");
+const seccionConsulta = document.getElementById("consulta");
+const seccionHorarios = document.getElementById("horarios");
 
 function setStatus(mensaje, tipo = "info") {
   statusEl.textContent = mensaje || "";
@@ -172,6 +178,30 @@ async function consultarPorTelefono(event) {
 }
 
 form.addEventListener("submit", consultarPorTelefono);
+
+// --- Navegación entre "Consulta" y "Horarios" ---
+function mostrarSeccionConsulta() {
+  seccionConsulta.style.display = "block";
+  seccionHorarios.style.display = "none";
+  navConsulta.classList.add("nav-link--active");
+  navHorarios.classList.remove("nav-link--active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function mostrarSeccionHorarios() {
+  seccionConsulta.style.display = "none";
+  seccionHorarios.style.display = "block";
+  navConsulta.classList.remove("nav-link--active");
+  navHorarios.classList.add("nav-link--active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+if (navConsulta && navHorarios && seccionConsulta && seccionHorarios) {
+  navConsulta.addEventListener("click", mostrarSeccionConsulta);
+  navHorarios.addEventListener("click", mostrarSeccionHorarios);
+  // Estado inicial: vista de consulta
+  mostrarSeccionConsulta();
+}
 
 // --- Panel flotante de planes (desde Firestore) ---
 const btnPlanes = document.getElementById("btn-planes");

@@ -1,611 +1,168 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Consulta de membresía - Fuerza Delta</title>
 
-    <!-- Fuente base -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Si ya tienes un CSS global de Fuerza Delta, puedes reemplazar/añadir tu archivo aquí -->
-    <style>
-      :root {
-        /* Paleta Fuerza Delta (basada en logo) */
-        --color-bg: #070707;
-        --color-card: #0b0b0b;
-        --color-primary: #6f7f2a; /* verde militar */
-        --color-primary-2: #97a64a; /* verde militar claro */
-        --color-primary-soft: rgba(111, 127, 42, 0.18);
-        --color-danger: #ef4444;
-        --color-text: #f1eadb; /* blanco hueso */
-        --color-text-soft: rgba(241, 234, 219, 0.72);
-        --color-border: rgba(151, 166, 74, 0.28);
-        --radius-lg: 16px;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      html {
-        overflow-x: hidden;
-      }
-
-      body {
-        min-height: 100vh;
-        min-height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow-x: hidden;
-        background: radial-gradient(
-            circle at 15% 10%,
-            rgba(151, 166, 74, 0.18),
-            transparent 45%
-          ),
-          radial-gradient(circle at 85% 15%, rgba(241, 234, 219, 0.08), transparent 55%),
-          radial-gradient(circle at bottom, rgba(151, 166, 74, 0.1), transparent 60%),
-          #050505;
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        color: var(--color-text);
-      }
-
-      .app-shell {
-        width: 100%;
-        max-width: 480px;
-        padding: 24px;
-      }
-
-      .card {
-        background: linear-gradient(
-            135deg,
-            rgba(241, 234, 219, 0.08),
-            transparent 40%
-          ),
-          radial-gradient(
-            circle at top right,
-            rgba(151, 166, 74, 0.26),
-            transparent 55%
-          ),
-          radial-gradient(circle at 20% 85%, rgba(111, 127, 42, 0.2), transparent 55%),
-          #070707;
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--color-border);
-        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.85);
-        padding: 24px 22px 22px;
-        backdrop-filter: blur(16px);
-      }
-
-      .card-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 18px;
-      }
-
-      .logo-img {
-        width: 44px;
-        height: 44px;
-        border-radius: 999px;
-        object-fit: cover;
-        border: 1px solid rgba(151, 166, 74, 0.55);
-        box-shadow: 0 0 0 3px rgba(151, 166, 74, 0.16),
-          0 16px 40px rgba(0, 0, 0, 0.55);
-      }
-
-      .brand-text {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .brand-title {
-        font-size: 0.95rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--color-text);
-      }
-
-      .brand-subtitle {
-        font-size: 0.8rem;
-        color: var(--color-text-soft);
-      }
-
-      .title {
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-
-      .subtitle {
-        font-size: 0.9rem;
-        color: var(--color-text-soft);
-        margin-bottom: 18px;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 12px;
-      }
-
-      label {
-        font-size: 0.85rem;
-        color: var(--color-text-soft);
-      }
-
-      .input-row {
-        display: flex;
-        gap: 8px;
-        min-width: 0;
-      }
-
-      input[type="tel"] {
-        flex: 1;
-        min-width: 0;
-        padding: 10px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(241, 234, 219, 0.22);
-        background: rgba(8, 8, 8, 0.72);
-        color: var(--color-text);
-        font-size: 0.95rem;
-        outline: none;
-        transition: border-color 0.18s ease, box-shadow 0.18s ease,
-          background-color 0.18s ease;
-      }
-
-      input[type="tel"]::placeholder {
-        color: #6b7280;
-      }
-
-      input[type="tel"]:focus {
-        border-color: rgba(151, 166, 74, 0.85);
-        box-shadow: 0 0 0 1px rgba(151, 166, 74, 0.5);
-        background: rgba(8, 8, 8, 0.88);
-      }
-
-      button {
-        border: none;
-        border-radius: 999px;
-        padding: 10px 18px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        background: linear-gradient(
-          135deg,
-          var(--color-primary-2),
-          var(--color-primary)
-        );
-        color: #060606;
-        box-shadow: 0 16px 40px rgba(151, 166, 74, 0.4);
-        transition: transform 0.14s ease, box-shadow 0.14s ease,
-          filter 0.14s ease;
-        white-space: nowrap;
-      }
-
-      button:hover:not(:disabled) {
-        transform: translateY(-1px);
-        box-shadow: 0 22px 55px rgba(151, 166, 74, 0.52);
-        filter: brightness(1.02);
-      }
-
-      button:active:not(:disabled) {
-        transform: translateY(0);
-        box-shadow: 0 12px 30px rgba(151, 166, 74, 0.35);
-      }
-
-      button:disabled {
-        cursor: progress;
-        opacity: 0.7;
-        box-shadow: none;
-      }
-
-      .button-icon {
-        font-size: 1.05rem;
-      }
-
-      .helper {
-        font-size: 0.78rem;
-        color: var(--color-text-soft);
-        margin-bottom: 4px;
-      }
-
-      .status {
-        font-size: 0.85rem;
-        margin-bottom: 6px;
-      }
-
-      .status--info {
-        color: var(--color-text-soft);
-      }
-
-      .status--error {
-        color: var(--color-danger);
-      }
-
-      .resultado {
-        margin-top: 10px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: rgba(8, 8, 8, 0.78);
-        border: 1px solid rgba(241, 234, 219, 0.18);
-        font-size: 0.9rem;
-        display: none;
-      }
-
-      .resultado.visible {
-        display: block;
-      }
-
-      .resultado-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 6px;
-      }
-
-      .resultado-nombre {
-        font-weight: 600;
-      }
-
-      .badge-estado {
-        padding: 3px 8px;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .badge-estado.activa {
-        background: var(--color-primary-soft);
-        color: var(--color-primary);
-        border: 1px solid rgba(151, 166, 74, 0.65);
-      }
-
-      .badge-estado.vencida {
-        background: rgba(239, 68, 68, 0.16);
-        color: var(--color-danger);
-        border: 1px solid rgba(239, 68, 68, 0.7);
-      }
-
-      .resultado-item {
-        font-size: 0.85rem;
-        color: var(--color-text-soft);
-      }
-
-      .resultado-item strong {
-        color: var(--color-text);
-        font-weight: 500;
-      }
-
-      .footnote {
-        margin-top: 10px;
-        font-size: 0.7rem;
-        color: rgba(241, 234, 219, 0.52);
-        text-align: center;
-      }
-
-      .footnote-link {
-        color: var(--color-primary-2);
-        text-decoration: none;
-        font-weight: 600;
-      }
-
-      .footnote-link:hover {
-        text-decoration: underline;
-      }
-
-      /* Botón y panel flotante de planes */
-      .btn-planes {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 100;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 18px;
-        border-radius: 999px;
-        border: 1px solid rgba(241, 234, 219, 0.5);
-        background: linear-gradient(
-          135deg,
-          var(--color-primary-2),
-          var(--color-primary)
-        );
-        color: #060606;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 8px 24px rgba(151, 166, 74, 0.35);
-        transition: transform 0.14s ease, box-shadow 0.14s ease;
-      }
-
-      .btn-planes:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 32px rgba(151, 166, 74, 0.45);
-      }
-
-      .btn-planes-icon {
-        font-size: 1.1rem;
-      }
-
-      .panel-planes {
-        position: fixed;
-        top: 64px;
-        right: 20px;
-        z-index: 99;
-        width: min(340px, calc(100vw - 40px));
-        border-radius: 16px;
-        background: linear-gradient(
-          135deg,
-          rgba(11, 11, 11, 0.98),
-          rgba(7, 7, 7, 0.98)
-        );
-        border: 1px solid var(--color-border);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(16px);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-8px);
-        transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-      }
-
-      .panel-planes.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-
-      .panel-planes-inner {
-        padding: 16px;
-      }
-
-      .panel-planes-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
-      }
-
-      .panel-planes-titulo {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--color-text);
-      }
-
-      .panel-planes-cerrar {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 8px;
-        background: transparent;
-        color: var(--color-text-soft);
-        font-size: 1.4rem;
-        line-height: 1;
-        cursor: pointer;
-        transition: background 0.15s ease, color 0.15s ease;
-      }
-
-      .panel-planes-cerrar:hover {
-        background: rgba(241, 234, 219, 0.1);
-        color: var(--color-text);
-      }
-
-      .panel-planes-lista {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .panel-planes-cargando,
-      .panel-planes-error {
-        font-size: 0.85rem;
-        color: var(--color-text-soft);
-      }
-
-      .panel-planes-error {
-        color: var(--color-danger);
-      }
-
-      .panel-plan-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 14px;
-        border-radius: 12px;
-        background: rgba(8, 8, 8, 0.6);
-        border: 1px solid rgba(241, 234, 219, 0.12);
-      }
-
-      .panel-plan-item .nombre {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--color-text);
-      }
-
-      .panel-plan-item .precio-dias {
-        font-size: 0.85rem;
-        color: var(--color-primary-2);
-        font-weight: 500;
-      }
-
-      /* Tablet / móvil grande */
-      @media (max-width: 480px) {
-        body {
-          align-items: flex-start;
-          justify-content: flex-start;
-        }
-
-        .app-shell {
-          padding: 20px 16px 24px;
-          padding-top: 88px;
-          padding-top: max(88px, env(safe-area-inset-top, 0px) + 60px);
-          max-width: 100%;
-        }
-
-        .card {
-          padding: 20px 18px 20px;
-        }
-
-        .input-row {
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .input-row input[type="tel"] {
-          width: 100%;
-        }
-
-        #btn-consultar {
-          width: 100%;
-        }
-
-        .btn-planes {
-          top: max(12px, env(safe-area-inset-top, 0px));
-          right: max(12px, env(safe-area-inset-right, 0px));
-          padding: 10px 16px;
-          font-size: 0.85rem;
-        }
-
-        .panel-planes {
-          top: max(56px, env(safe-area-inset-top, 0px) + 48px);
-          right: max(12px, env(safe-area-inset-right, 0px));
-          left: max(12px, env(safe-area-inset-left, 0px));
-          width: auto;
-        }
-      }
-
-      /* Móvil pequeño (ej. 320–360px) */
-      @media (max-width: 380px) {
-        .app-shell {
-          padding-left: 12px;
-          padding-right: 12px;
-        }
-
-        .card {
-          padding: 16px 14px 16px;
-        }
-
-        .title {
-          font-size: 1.05rem;
-        }
-
-        .subtitle {
-          font-size: 0.85rem;
-        }
-
-        .btn-planes {
-          padding: 8px 14px;
-          font-size: 0.8rem;
-        }
-
-        .panel-plan-item {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 4px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Botón flotante Planes -->
-    <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
-      <span class="btn-planes-icon">💪</span>
-      <span>Planes</span>
-    </button>
-
-    <!-- Panel flotante de planes disponibles -->
-    <div id="panel-planes" class="panel-planes" role="dialog" aria-labelledby="panel-planes-titulo" aria-hidden="true">
-      <div class="panel-planes-inner">
-        <div class="panel-planes-header">
-          <h2 id="panel-planes-titulo" class="panel-planes-titulo">Planes disponibles</h2>
-          <button type="button" id="btn-cerrar-planes" class="panel-planes-cerrar" aria-label="Cerrar">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div id="panel-planes-lista" class="panel-planes-lista">
-          <p class="panel-planes-cargando">Cargando planes…</p>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Consulta de membresía - Fuerza Delta</title>
+
+  <!-- Fuente base -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="site-brand">
+        <img src="./assets/logo-fd.jpeg" alt="Logo Fuerza Delta" class="site-logo" />
+        <span>Fuerza&nbsp;Delta</span>
+      </div>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <button id="nav-consulta" class="nav-link nav-link--active" type="button">
+          Consulta
+        </button>
+        <button id="nav-horarios" class="nav-link" type="button">
+          Horarios
+        </button>
+        <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
+          <span class="btn-planes-icon" aria-hidden="true">💪</span>
+          <span>Planes</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Panel flotante de planes disponibles -->
+  <div id="panel-planes" class="panel-planes" role="dialog" aria-labelledby="panel-planes-titulo" aria-hidden="true">
+    <div class="panel-planes-inner">
+      <div class="panel-planes-header">
+        <h2 id="panel-planes-titulo" class="panel-planes-titulo">Planes disponibles</h2>
+        <button type="button" id="btn-cerrar-planes" class="panel-planes-cerrar" aria-label="Cerrar">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div id="panel-planes-lista" class="panel-planes-lista">
+        <p class="panel-planes-cargando">Cargando planes…</p>
       </div>
     </div>
+  </div>
 
-    <div class="app-shell">
-      <main class="card">
-        <header class="card-header">
-          <img
-            src="./assets/logo-fd.jpeg"
-            alt="Fuerza Delta"
-            class="logo-img"
-            loading="lazy"
-          />
-          <div class="brand-text">
-            <div class="brand-title">Fuerza Delta</div>
-            <div class="brand-subtitle">Consulta de membresías</div>
-          </div>
-        </header>
+  <div class="app-shell">
+    <main id="consulta" class="card">
+      <header class="card-header">
+        <img src="./assets/logo-fd.jpeg" alt="Fuerza Delta" class="logo-img" loading="lazy" />
+        <div class="brand-text">
+          <div class="brand-title">Fuerza Delta</div>
+          <div class="brand-subtitle">Consulta de membresías</div>
+        </div>
+      </header>
 
-        <h1 class="title">Consulta el estado de tu membresía</h1>
-        <p class="subtitle">
-          Ingresa el número de celular con el que diste de alta tu membresía en
-          el gimnasio.
+      <h1 class="title">Consulta el estado de tu membresía</h1>
+      <p class="subtitle">
+        Ingresa el número de celular con el que diste de alta tu membresía en
+        el gimnasio.
+      </p>
+
+      <form id="consulta-form">
+        <label for="telefono">Número de celular</label>
+        <div class="input-row">
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel" placeholder="Ej. 5551234567" required />
+          <button type="submit" id="btn-consultar">
+            <span class="button-icon">🔍</span>
+            <span>Consultar</span>
+          </button>
+        </div>
+      </form>
+
+      <p id="helper" class="helper">
+        Solo lectura: esta página <strong>no</strong> modifica tu membresía.
+      </p>
+
+      <p id="status" class="status status--info"></p>
+
+      <section id="resultado" class="resultado" aria-live="polite"></section>
+
+      <p class="footnote">
+        Si tienes dudas sobre tu membresía, por favor comunícate directamente
+        con Fuerza Delta al <b>WhatsApp <a href="https://wa.me/573012796566" target="_blank" rel="noopener noreferrer"
+            class="footnote-link">3012796566</a>.</b>
+      </p>
+    </main>
+
+    <section id="horarios" class="card section-horarios" aria-labelledby="titulo-horarios">
+      <header class="horarios-card-header">
+        <div class="horarios-tag">
+          <a class="horarios-instagram"
+            href="https://www.instagram.com/fuerzadeltaapartado?utm_source=ig_web_button_share_sheet&amp;igsh=ZDNlZDc0MzIxNw=="
+            target="_blank" rel="noopener noreferrer" aria-label="Ir al perfil de Instagram de Fuerza Delta Apartadó">
+            <span class="horarios-instagram-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" />
+              </svg>
+            </span>
+            <span>@fuerzadeltaapartado</span>
+          </a>
+        </div>
+        <h2 id="titulo-horarios" class="horarios-title-main">
+          Horario de clases
+        </h2>
+        <p class="horarios-subtitle">
+          Consulta los bloques de entrenamiento disponibles de lunes a viernes.
         </p>
+      </header>
 
-        <form id="consulta-form">
-          <label for="telefono">Número de celular</label>
-          <div class="input-row">
-            <input
-              type="tel"
-              id="telefono"
-              name="telefono"
-              autocomplete="tel"
-              placeholder="Ej. 5551234567"
-              required
-            />
-            <button type="submit" id="btn-consultar">
-              <span class="button-icon">🔍</span>
-              <span>Consultar</span>
-            </button>
-          </div>
-        </form>
+      <div class="horarios-grid">
+        <article class="horarios-bloque">
+          <h3 class="horarios-bloque-titulo">Mañana</h3>
+          <p class="horarios-bloque-horario">
+            Lunes a viernes · 5:00 a.m. – 9:00 a.m.
+          </p>
+          <p class="horarios-bloque-detalle">
+            Clases por hora: 5:00–6:00, 6:00–7:00, 7:00–8:00 y 8:00–9:00.
+          </p>
+        </article>
 
-        <p id="helper" class="helper">
-          Solo lectura: esta página <strong>no</strong> modifica tu membresía.
-        </p>
+        <article class="horarios-bloque">
+          <h3 class="horarios-bloque-titulo">Tarde</h3>
+          <p class="horarios-bloque-horario">Lunes a viernes · 5:00 p.m. – 9:00 p.m.</p>
+          <p class="horarios-bloque-detalle">
+            Clases por hora: 5:00–6:00, 6:00–7:00, 7:00–8:00 y 8:00–9:00.
+          </p>
+        </article>
 
-        <p id="status" class="status status--info"></p>
+        <article class="horarios-bloque">
+          <h3 class="horarios-bloque-titulo">Fin de semana</h3>
+          <p class="horarios-bloque-horario">Sábados · 6:00 a.m. – 8:00 a.m.</p>
+          <p class="horarios-bloque-detalle">
+            Dos bloques de entrenamiento: 6:00–7:00 y 7:00–8:00.
+          </p>
+        </article>
 
-        <section id="resultado" class="resultado" aria-live="polite"></section>
+        <article class="horarios-bloque">
+          <h3 class="horarios-bloque-titulo">Festivos</h3>
+          <p class="horarios-bloque-horario">Único bloque · 8:00 a.m. – 9:00 a.m.</p>
+          <p class="horarios-bloque-detalle">
+            Verifica en recepción qué días aplican estos horarios especiales.
+          </p>
+        </article>
+      </div>
 
-        <p class="footnote">
-          Si tienes dudas sobre tu membresía, por favor comunícate directamente
-          con Fuerza Delta al <b>WhatsApp <a href="https://wa.me/573012796566" target="_blank" rel="noopener noreferrer" class="footnote-link">3012796566</a>.</b>
-        </p>
-      </main>
-    </div>
+      <p class="horarios-footer">
+        Los horarios pueden ajustarse en días especiales. Pregunta en recepción
+        o a tu entrenador para confirmar la disponibilidad de cada bloque.
+      </p>
+    </section>
+  </div>
 
-    <!-- Script principal: módulo ES que se conecta a Firebase/Firestore -->
-    <script type="module" src="./js/consulta.js"></script>
-  </body>
-  </html>
+  <!-- Script principal: módulo ES que se conecta a Firebase/Firestore -->
+  <script type="module" src="./js/consulta.js"></script>
+</body>
 
+</html>
