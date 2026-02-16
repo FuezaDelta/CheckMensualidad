@@ -31,10 +31,10 @@
         <a href="./index.html" class="nav-link">Consulta</a>
         <a href="./horarios.html" class="nav-link">Horarios</a>
         <a href="./contactenos.html" class="nav-link nav-link--active">Contáctenos</a>
-        <a href="./index.html#planes" class="btn-planes">
+        <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
           <span class="btn-planes-icon" aria-hidden="true">💪</span>
           <span>Planes</span>
-        </a>
+        </button>
       </nav>
     </div>
   </header>
@@ -48,14 +48,28 @@
         <a href="./index.html" class="sidebar-link">Consulta</a>
         <a href="./horarios.html" class="sidebar-link">Horarios</a>
         <a href="./contactenos.html" class="sidebar-link sidebar-link--active">Contáctenos</a>
-        <a href="./index.html#planes" class="sidebar-btn-planes">
+        <button type="button" id="btn-planes-sidebar" class="sidebar-btn-planes">
           <span class="btn-planes-icon">💪</span>
           <span>Planes</span>
-        </a>
+        </button>
       </nav>
     </div>
     <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
   </aside>
+
+  <div id="panel-planes" class="panel-planes" role="dialog" aria-labelledby="panel-planes-titulo" aria-hidden="true">
+    <div class="panel-planes-inner">
+      <div class="panel-planes-header">
+        <h2 id="panel-planes-titulo" class="panel-planes-titulo">Planes disponibles</h2>
+        <button type="button" id="btn-cerrar-planes" class="panel-planes-cerrar" aria-label="Cerrar">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div id="panel-planes-lista" class="panel-planes-lista">
+        <p class="panel-planes-cargando">Cargando planes…</p>
+      </div>
+    </div>
+  </div>
 
   <div class="app-shell">
     <main class="card section-contactenos" id="contactenos">
@@ -67,7 +81,7 @@
       </header>
 
       <div class="contactenos-grid">
-        <a href="https://wa.me/573012796566" target="_blank" rel="noopener noreferrer" class="contacteno-item contacteno-whatsapp">
+        <a href="https://wa.me/573012796566?text=Estoy%20interesado%20en%20entrenar%20en%20Fuerza%20Delta%20%F0%9F%92%AA" target="_blank" rel="noopener noreferrer" class="contacteno-item contacteno-whatsapp">
           <span class="contacteno-icon" aria-hidden="true">📱</span>
           <div class="contacteno-text">
             <strong>WhatsApp</strong>
@@ -106,7 +120,9 @@
     </main>
   </div>
 
+  <script src="./js/transitions.js"></script>
   <script src="./js/nav.js"></script>
+  <script type="module" src="./js/planes-panel.js"></script>
 </body>
 
 </html>
