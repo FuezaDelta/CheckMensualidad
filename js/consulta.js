@@ -81,12 +81,6 @@ const helperEl = document.getElementById("helper");
 const resultadoEl = document.getElementById("resultado");
 const btnConsultar = document.getElementById("btn-consultar");
 
-// Referencias al DOM (navegación principal)
-const navConsulta = document.getElementById("nav-consulta");
-const navHorarios = document.getElementById("nav-horarios");
-const seccionConsulta = document.getElementById("consulta");
-const seccionHorarios = document.getElementById("horarios");
-
 function setStatus(mensaje, tipo = "info") {
   statusEl.textContent = mensaje || "";
   statusEl.classList.remove("status--info", "status--error");
@@ -179,30 +173,6 @@ async function consultarPorTelefono(event) {
 
 form.addEventListener("submit", consultarPorTelefono);
 
-// --- Navegación entre "Consulta" y "Horarios" ---
-function mostrarSeccionConsulta() {
-  seccionConsulta.style.display = "block";
-  seccionHorarios.style.display = "none";
-  navConsulta.classList.add("nav-link--active");
-  navHorarios.classList.remove("nav-link--active");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function mostrarSeccionHorarios() {
-  seccionConsulta.style.display = "none";
-  seccionHorarios.style.display = "block";
-  navConsulta.classList.remove("nav-link--active");
-  navHorarios.classList.add("nav-link--active");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-if (navConsulta && navHorarios && seccionConsulta && seccionHorarios) {
-  navConsulta.addEventListener("click", mostrarSeccionConsulta);
-  navHorarios.addEventListener("click", mostrarSeccionHorarios);
-  // Estado inicial: vista de consulta
-  mostrarSeccionConsulta();
-}
-
 // --- Panel flotante de planes (desde Firestore) ---
 const btnPlanes = document.getElementById("btn-planes");
 const panelPlanes = document.getElementById("panel-planes");
@@ -273,26 +243,47 @@ async function cargarPlanes() {
   }
 }
 
-btnPlanes.addEventListener("click", () => {
+function togglePanelPlanes() {
   if (panelPlanes.classList.contains("visible")) {
     cerrarPanelPlanes();
   } else {
     abrirPanelPlanes();
   }
-});
+}
 
-btnCerrarPlanes.addEventListener("click", cerrarPanelPlanes);
+if (btnPlanes) {
+  btnPlanes.addEventListener("click", togglePanelPlanes);
+}
+
+const btnPlanesSidebar = document.getElementById("btn-planes-sidebar");
+if (btnPlanesSidebar) {
+  btnPlanesSidebar.addEventListener("click", () => {
+    abrirPanelPlanes();
+    document.getElementById("sidebar")?.classList.remove("sidebar--open");
+    document.body.classList.remove("sidebar-open");
+    if (document.getElementById("btn-hamburger")) {
+      document.getElementById("btn-hamburger").setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+if (btnCerrarPlanes) {
+  btnCerrarPlanes.addEventListener("click", cerrarPanelPlanes);
+}
 
 // Cerrar al hacer clic fuera del panel
 document.addEventListener("click", (e) => {
-  if (
-    panelPlanes.classList.contains("visible") &&
-    !panelPlanes.contains(e.target) &&
-    !btnPlanes.contains(e.target)
-  ) {
-    cerrarPanelPlanes();
-  }
+  if (!panelPlanes.classList.contains("visible")) return;
+  if (panelPlanes.contains(e.target)) return;
+  if (btnPlanes && btnPlanes.contains(e.target)) return;
+  if (btnPlanesSidebar && btnPlanesSidebar.contains(e.target)) return;
+  cerrarPanelPlanes();
 });
+
+// Abrir panel si se entra con hash #planes
+if (window.location.hash === "#planes") {
+  abrirPanelPlanes();
+}
 
 // Mensaje inicial
 setStatus("Escribe tu número de celular y presiona Consultar.", "info");

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Contáctenos - Fuerza Delta</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="./index.html" class="site-brand" aria-label="Fuerza Delta - Inicio">
+        <img src="./assets/logo-fd.jpeg" alt="Logo Fuerza Delta" class="site-logo" />
+        <span>Fuerza&nbsp;Delta</span>
+      </a>
+
+      <button type="button" class="btn-hamburger" id="btn-hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="./index.html" class="nav-link">Consulta</a>
+        <a href="./horarios.html" class="nav-link">Horarios</a>
+        <a href="./contactenos.html" class="nav-link nav-link--active">Contáctenos</a>
+        <a href="./index.html#planes" class="btn-planes">
+          <span class="btn-planes-icon" aria-hidden="true">💪</span>
+          <span>Planes</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <aside id="sidebar" class="sidebar" aria-label="Menú de navegación" aria-hidden="true">
+    <div class="sidebar-inner">
+      <button type="button" class="sidebar-cerrar" id="sidebar-cerrar" aria-label="Cerrar menú">
+        <span aria-hidden="true">×</span>
+      </button>
+      <nav class="sidebar-nav" aria-label="Enlaces del menú">
+        <a href="./index.html" class="sidebar-link">Consulta</a>
+        <a href="./horarios.html" class="sidebar-link">Horarios</a>
+        <a href="./contactenos.html" class="sidebar-link sidebar-link--active">Contáctenos</a>
+        <a href="./index.html#planes" class="sidebar-btn-planes">
+          <span class="btn-planes-icon">💪</span>
+          <span>Planes</span>
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+  </aside>
+
+  <div class="app-shell">
+    <main class="card section-contactenos" id="contactenos">
+      <header class="contactenos-header">
+        <h1 class="title">Contáctenos</h1>
+        <p class="subtitle">
+          Estamos para atenderte. Escríbenos o visítanos.
+        </p>
+      </header>
+
+      <div class="contactenos-grid">
+        <a href="https://wa.me/573012796566" target="_blank" rel="noopener noreferrer" class="contacteno-item contacteno-whatsapp">
+          <span class="contacteno-icon" aria-hidden="true">📱</span>
+          <div class="contacteno-text">
+            <strong>WhatsApp</strong>
+            <span>301 279 6566</span>
+          </div>
+        </a>
+
+        <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer" class="contacteno-item contacteno-instagram">
+          <span class="contacteno-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6" />
+              <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" />
+            </svg>
+          </span>
+          <div class="contacteno-text">
+            <strong>Instagram</strong>
+            <span>@fuerzadeltaapartado</span>
+          </div>
+        </a>
+
+        <a href="https://maps.app.goo.gl/736kUSpa4ATETqVJA" target="_blank" rel="noopener noreferrer" class="contacteno-item contacteno-info">
+          <span class="contacteno-icon" aria-hidden="true">📍</span>
+          <div class="contacteno-text">
+            <strong>Ubicación</strong>
+            <span>Apartadó, Antioquia. Ver en Google Maps.</span>
+          </div>
+        </a>
+      </div>
+
+      <p class="footnote">
+        Para consultar el estado de tu membresía usa la página de
+        <a href="./index.html" class="footnote-link">Consulta</a>.
+        Para ver horarios de clases, entra a <a href="./horarios.html" class="footnote-link">Horarios</a>.
+      </p>
+    </main>
+  </div>
+
+  <script src="./js/nav.js"></script>
+</body>
+
+</html>

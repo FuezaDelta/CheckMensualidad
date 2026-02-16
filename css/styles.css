@@ -110,6 +110,12 @@ body {
   text-transform: uppercase;
   color: var(--color-text-soft);
   flex-shrink: 0;
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+
+.site-brand:hover {
+  color: var(--color-text);
 }
 
 .site-brand span {
@@ -140,6 +146,8 @@ body {
 
 .nav-link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
   border: none;
   background: transparent;
   color: var(--color-text-soft);
@@ -153,6 +161,7 @@ body {
   white-space: nowrap;
   flex-shrink: 1;
   min-width: 0;
+  font-family: inherit;
 }
 
 .nav-link::after {
@@ -423,9 +432,7 @@ button:disabled {
 
 /* Sección de horarios (pantalla independiente) */
 .section-horarios {
-  margin-top: 16px;
-  display: none;
-  /* oculta horarios por defecto, solo se ve cuando se selecciona en la nav */
+  margin-top: 0;
 }
 
 .horarios-card-header {
@@ -687,8 +694,255 @@ button:disabled {
   flex-shrink: 0;
 }
 
+/* Botón hamburger (solo móvil) */
+.btn-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(241, 234, 219, 0.08);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-hamburger:hover {
+  background: rgba(241, 234, 219, 0.14);
+}
+
+.btn-hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.btn-hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.btn-hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.hamburger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Sidebar móvil */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 130;
+  width: min(280px, 85vw);
+  max-width: 280px;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0.25s ease;
+}
+
+.sidebar--open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.sidebar-inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: max(env(safe-area-inset-top), 16px) 20px 24px;
+  background: linear-gradient(180deg, rgba(11, 11, 11, 0.98), rgba(7, 7, 7, 0.98));
+  border-left: 1px solid var(--color-border);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebar--open .sidebar-inner {
+  transform: translateX(0);
+}
+
+.sidebar-cerrar {
+  align-self: flex-end;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-soft);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-cerrar:hover {
+  background: rgba(241, 234, 219, 0.1);
+  color: var(--color-text);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link,
+.sidebar-btn-planes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text-soft);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-btn-planes:hover {
+  background: rgba(241, 234, 219, 0.08);
+  color: var(--color-text);
+}
+
+.sidebar-link--active,
+.sidebar-link--active:hover {
+  background: rgba(151, 166, 74, 0.25);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.sidebar-btn-planes {
+  margin-top: 8px;
+  background: linear-gradient(135deg, var(--color-primary-2), var(--color-primary));
+  color: #060606;
+  font-weight: 600;
+  justify-content: center;
+}
+
+.sidebar-btn-planes:hover {
+  filter: brightness(1.08);
+  color: #060606;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.sidebar--open .sidebar-backdrop {
+  opacity: 1;
+  visibility: visible;
+}
+
+body.sidebar-open {
+  overflow: hidden;
+}
+
+/* Contáctenos */
+.section-contactenos .contactenos-header {
+  margin-bottom: 20px;
+}
+
+.contactenos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.contacteno-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(241, 234, 219, 0.14);
+  background: radial-gradient(circle at top left, rgba(151, 166, 74, 0.12), transparent 55%),
+    rgba(8, 8, 8, 0.6);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+a.contacteno-item:hover {
+  border-color: rgba(151, 166, 74, 0.4);
+  background: radial-gradient(circle at top left, rgba(151, 166, 74, 0.18), transparent 55%),
+    rgba(8, 8, 8, 0.7);
+}
+
+.contacteno-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.contacteno-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-primary-2);
+}
+
+.contacteno-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contacteno-text strong {
+  font-size: 0.9rem;
+  color: var(--color-primary-2);
+}
+
+.contacteno-text span {
+  font-size: 0.85rem;
+  color: var(--color-text-soft);
+  line-height: 1.4;
+}
+
 /* Tablet y pantallas medianas */
 @media (max-width: 768px) {
+  .btn-hamburger {
+    display: flex;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
   .site-header-inner {
     padding: 10px 16px;
     gap: 12px;
@@ -980,6 +1234,14 @@ button:disabled {
 
 /* Pantallas grandes (tablets en landscape y desktop) */
 @media (min-width: 769px) {
+  .btn-hamburger {
+    display: none;
+  }
+
+  .site-nav {
+    display: flex;
+  }
+
   .app-shell {
     max-width: 600px;
   }
