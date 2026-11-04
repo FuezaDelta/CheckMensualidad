@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// Reglas de acceso a Firestore.
+//
+// Estas reglas son la única barrera entre internet y los datos: cualquier cosa
+// que se permita aquí, un visitante puede hacerla desde la consola de su
+// navegador. Por eso viven en el repositorio y se revisan como código.
+//
+// Se despliegan con:  firebase deploy --only firestore:rules
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Los planes son información pública (la misma que está en la cartelera del
+    // gimnasio). El límite evita que se use la colección como fuente de tráfico.
+    match /planes/{planId} {
+      allow get: if true;
+      allow list: if request.query.limit <= 50;
+      allow write: if false;
+    }
+
+    // Datos personales de los clientes: nombre, teléfono y vencimiento.
+    //
+    // El identificador del documento es el teléfono normalizado a 10 dígitos, y
+    // de ahí sale toda la seguridad de este diseño: se permite `get`, que obliga
+    // a conocer el identificador exacto, y se prohíbe `list`. Un cliente puede
+    // consultar su propia membresía sin necesidad de servidor, pero nadie puede
+    // recorrer la colección para descargar los datos de todos.
+    //
+    // Permitir `list` no sería aceptable ni con un límite bajo: el límite acota
+    // cada página, no el total, y las reglas no pueden ver los cursores con los
+    // que se pide la siguiente, así que la colección entera sería descargable.
+    //
+    // Un `get` devuelve el documento completo, porque las reglas no saben filtrar
+    // campos. No guardar aquí nada que no se le pueda mostrar a quien conoce el
+    // número: ni cédula, ni dirección, ni notas internas.
+    match /usuarios/{telefono} {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // Historial de pagos. Ninguna parte de este sitio la usa; se administra a
+    // mano desde la consola de Firebase, que actúa con permisos de administrador
+    // y no pasa por estas reglas. Se declara de forma explícita, en lugar de
+    // dejarla a la regla final, para que quede constancia de que la colección
+    // existe y de que su cierre es deliberado.
+    match /pagos/{pagoId} {
+      allow read, write: if false;
+    }
+
+    // Todo lo demás queda cerrado por defecto.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

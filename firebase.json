@@ -1,0 +1,65 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "templates/**",
+      "scripts/**",
+      "tests/**",
+      "package.json",
+      "package-lock.json",
+      "eslint.config.mjs",
+      "firestore.rules",
+      "firestore.indexes.json",
+      "README.md"
+    ],
+    "cleanUrls": false,
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.cloudfunctions.net; frame-src https://www.google.com https://www.recaptcha.net; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+          },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|png|webp|svg|ico)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions",
+    "predeploy": ["npm run build"],
+    "ignore": ["node_modules", ".git", "*.log"]
+  },
+  "emulators": {
+    "functions": { "port": 5001 },
+    "firestore": { "port": 8080 },
+    "hosting": { "port": 5000 },
+    "ui": { "enabled": true }
+  }
+}

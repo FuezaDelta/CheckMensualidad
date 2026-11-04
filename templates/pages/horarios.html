@@ -1,0 +1,31 @@
+<!--meta
+{
+  "title": "Horarios - Fuerza Delta",
+  "description": "Horarios de clases de Fuerza Delta en Apartadó: bloques de mañana, tarde, fines de semana y festivos.",
+  "entry": "estatica"
+}
+-->
+<section class="banner" aria-labelledby="titulo-horarios">
+  <img src="./assets/FD5.jpeg" alt="" class="banner-foto" width="1280" height="960" fetchpriority="high" />
+  <div class="banner-contenido contenedor">
+    <p class="eyebrow">Fuerza Delta</p>
+    <h1 id="titulo-horarios" class="banner-titulo">Horario de clases</h1>
+    <p class="banner-texto">Clases de una hora, de lunes a sábado y festivos.</p>
+  </div>
+</section>
+
+<section class="seccion seccion-horarios seccion--pegada" aria-label="Bloques de entrenamiento">
+  <div class="contenedor">
+    {{> horarios-bloques}}
+
+    <p class="seccion-pie">
+      Los horarios pueden ajustarse en días especiales. Pregunta en recepción o a tu
+      entrenador para confirmar la disponibilidad de cada bloque.
+    </p>
+
+    <div class="cta-final">
+      <a href="./index.html#consulta" class="btn btn--primario">Consulta tu membresía</a>
+      <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer" class="btn btn--fantasma">@fuerzadeltaapartado</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,149 @@
+<!--meta
+{
+  "title": "Fuerza Delta - Gimnasio en Apartadó | Consulta tu membresía",
+  "description": "Fuerza Delta, gimnasio en Apartadó. Consulta en segundos el estado y la fecha de vencimiento de tu membresía, mira nuestros planes, horarios y comunidad.",
+  "entry": "inicio"
+}
+-->
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="hero-fotos" aria-hidden="true">
+    <img src="./assets/FD9.jpg" alt="" class="hero-foto" width="1206" height="1370" fetchpriority="high" />
+    <img src="./assets/FD8.jpg" alt="" class="hero-foto" width="1206" height="1503" />
+    <img src="./assets/FD10.jpeg" alt="" class="hero-foto" width="1122" height="1402" />
+  </div>
+
+  <div class="hero-contenido contenedor">
+    <p class="eyebrow">Apartadó · Antioquia</p>
+    <h1 id="hero-titulo" class="hero-titulo">
+      <span class="hero-titulo-linea">Fuerza</span>
+      <span class="hero-titulo-linea hero-titulo-linea--acento">Delta</span>
+    </h1>
+    <p class="hero-lema">Entrena fuerte. Entrena en comunidad.</p>
+    <div class="hero-acciones">
+      <a href="#consulta" class="btn btn--primario">Consulta tu membresía</a>
+      <a href="#nuestros-planes" class="btn btn--fantasma">Ver planes</a>
+    </div>
+  </div>
+
+  <span class="hero-chevron" aria-hidden="true"></span>
+</section>
+
+<section id="consulta" class="seccion-consulta" aria-labelledby="titulo-consulta">
+  <div class="consulta-tarjeta">
+    <div class="consulta-encabezado">
+      <p class="eyebrow eyebrow--oscuro">Socios</p>
+      <h2 id="titulo-consulta" class="consulta-titulo">Consulta el estado de tu membresía</h2>
+      <p class="consulta-subtitulo">
+        Escribe el número de celular con el que te registraste en el gimnasio.
+      </p>
+    </div>
+
+    <form id="consulta-form" class="consulta-form">
+      <label for="telefono" class="consulta-label">Número de celular</label>
+      <div class="input-row">
+        <input type="tel" id="telefono" name="telefono" class="consulta-input" autocomplete="tel" inputmode="numeric" maxlength="20" placeholder="Ej. 3113215432" required />
+        <button type="submit" id="btn-consultar" class="btn btn--primario consulta-boton">Consultar</button>
+      </div>
+    </form>
+
+    <p id="helper" class="helper">
+      Solo lectura: esta página <strong>no</strong> modifica tu membresía.
+    </p>
+
+    <p id="status" class="status status--info" role="status"></p>
+
+    <section id="resultado" class="resultado" aria-live="polite"></section>
+
+    <p class="consulta-ayuda">
+      ¿Dudas con tu membresía? Escríbenos al
+      <a href="https://wa.me/573103982286?text=Estoy%20interesado%20en%20entrenar%20en%20Fuerza%20Delta%20%F0%9F%92%AA" target="_blank" rel="noopener noreferrer">WhatsApp 310 398 2286</a>.
+    </p>
+  </div>
+</section>
+
+<section class="seccion seccion-comunidad" aria-labelledby="titulo-comunidad">
+  <div class="contenedor">
+    <header class="seccion-encabezado" data-revelar>
+      <p class="eyebrow">Comunidad</p>
+      <h2 id="titulo-comunidad" class="seccion-titulo">Aquí nadie entrena solo</h2>
+      <p class="seccion-texto">
+        Madrugadas, noches y fines de semana: cada clase es una razón más para volver.
+      </p>
+    </header>
+
+    <div class="galeria" id="galeria">
+      <a href="./assets/FD3.jpeg" class="galeria-item galeria-item--ancha" data-revelar>
+        <img src="./assets/FD3.jpeg" alt="Grupo de socios de Fuerza Delta en el gimnasio sosteniendo la bandera del gimnasio" width="1280" height="720" loading="lazy" />
+      </a>
+      <a href="./assets/FD2.jpeg" class="galeria-item galeria-item--alta" data-revelar>
+        <img src="./assets/FD2.jpeg" alt="Socios celebrando bajo el letrero de Fuerza Delta" width="960" height="1280" loading="lazy" />
+      </a>
+      <a href="./assets/FD5.jpeg" class="galeria-item" data-revelar>
+        <img src="./assets/FD5.jpeg" alt="Socios mostrando los bíceps al terminar la clase" width="1280" height="960" loading="lazy" />
+      </a>
+      <a href="./assets/FD6.jpeg" class="galeria-item" data-revelar>
+        <img src="./assets/FD6.jpeg" alt="Grupo de Fuerza Delta después de un entrenamiento nocturno al aire libre" width="960" height="1280" loading="lazy" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="seccion seccion-competencias" aria-labelledby="titulo-competencias">
+  <div class="contenedor competencias">
+    <figure class="competencias-foto" data-revelar>
+      <img src="./assets/FD7.jpg" alt="Atletas de Fuerza Delta corriendo durante una competencia" width="1206" height="1500" loading="lazy" />
+    </figure>
+    <div class="competencias-texto" data-revelar>
+      <p class="eyebrow">Competencias</p>
+      <h2 id="titulo-competencias" class="seccion-titulo">Del box a la línea de salida</h2>
+      <p class="seccion-texto">
+        Nuestros atletas llevan el nombre de Fuerza Delta a cada competencia. Entrenamos
+        juntos, competimos juntos y celebramos juntos.
+      </p>
+      <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer" class="btn btn--fantasma">Síguenos en Instagram</a>
+    </div>
+  </div>
+</section>
+
+<section id="nuestros-planes" class="seccion seccion-planes" aria-labelledby="titulo-planes">
+  <div class="contenedor">
+    <header class="seccion-encabezado" data-revelar>
+      <p class="eyebrow eyebrow--oscuro">Planes</p>
+      <h2 id="titulo-planes" class="seccion-titulo">Elige tu plan</h2>
+      <p class="seccion-texto">Precios vigentes. Escríbenos y te ayudamos a empezar.</p>
+    </header>
+
+    <div id="planes-grid" class="planes-grid" aria-live="polite">
+      <p class="planes-mensaje">Cargando planes…</p>
+    </div>
+  </div>
+</section>
+
+<section class="seccion seccion-horarios" aria-labelledby="titulo-horarios">
+  <div class="contenedor">
+    <header class="seccion-encabezado" data-revelar>
+      <p class="eyebrow">Horarios</p>
+      <h2 id="titulo-horarios" class="seccion-titulo">Clases de una hora</h2>
+      <p class="seccion-texto">Escoge el bloque que mejor se acomode a tu día.</p>
+    </header>
+
+    {{> horarios-bloques}}
+
+    <p class="seccion-pie">
+      Los horarios pueden ajustarse en días especiales.
+      <a href="./horarios.html">Ver página de horarios</a>
+    </p>
+  </div>
+</section>
+
+<section class="seccion seccion-contacto" aria-labelledby="titulo-contacto">
+  <div class="contenedor">
+    <header class="seccion-encabezado" data-revelar>
+      <p class="eyebrow">Contacto</p>
+      <h2 id="titulo-contacto" class="seccion-titulo">Ven a entrenar</h2>
+      <p class="seccion-texto">Escríbenos o visítanos. Te esperamos.</p>
+    </header>
+
+    {{> contacto-tarjetas}}
+  </div>
+</section>

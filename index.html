@@ -1,63 +1,79 @@
 <!DOCTYPE html>
+<!-- Archivo generado por scripts/build.mjs — no editar a mano. -->
 <html lang="es">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Consulta de membresía - Fuerza Delta</title>
+  <title>Fuerza Delta - Gimnasio en Apartadó | Consulta tu membresía</title>
+  <meta name="description" content="Fuerza Delta, gimnasio en Apartadó. Consulta en segundos el estado y la fecha de vencimiento de tu membresía, mira nuestros planes, horarios y comunidad." />
+  <meta name="theme-color" content="#050505" />
+
+  <link rel="icon" href="./assets/logo-fd.jpeg" />
+  <link rel="apple-touch-icon" href="./assets/logo-fd.jpeg" />
+  <link rel="canonical" href="https://manejo-65354.web.app/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Fuerza Delta" />
+  <meta property="og:title" content="Fuerza Delta - Gimnasio en Apartadó | Consulta tu membresía" />
+  <meta property="og:description" content="Fuerza Delta, gimnasio en Apartadó. Consulta en segundos el estado y la fecha de vencimiento de tu membresía, mira nuestros planes, horarios y comunidad." />
+  <meta property="og:image" content="https://manejo-65354.web.app/assets/FD3.jpeg" />
+  <meta property="og:url" content="https://manejo-65354.web.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 
-<body>
-  <header class="site-header">
+<body data-page="index">
+  <a href="#contenido" class="saltar-contenido">Saltar al contenido</a>
+
+  <header class="site-header" id="site-header">
     <div class="site-header-inner">
       <a href="./index.html" class="site-brand" aria-label="Fuerza Delta - Inicio">
-        <img src="./assets/logo-fd.jpeg" alt="Logo Fuerza Delta" class="site-logo" />
+        <img src="./assets/logo-fd.jpeg" alt="" class="site-logo" width="1536" height="926" />
         <span>Fuerza&nbsp;Delta</span>
       </a>
+
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="./index.html" class="nav-link nav-link--active" aria-current="page" data-nav="index">Inicio</a>
+        <a href="./horarios.html" class="nav-link" data-nav="horarios">Horarios</a>
+        <a href="./contactenos.html" class="nav-link" data-nav="contactenos">Contáctenos</a>
+        <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
+          <span>Planes</span>
+        </button>
+      </nav>
+
+      <a href="./index.html#consulta" class="btn-header-consulta">Consultar membresía</a>
 
       <button type="button" class="btn-hamburger" id="btn-hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </button>
-
-      <nav class="site-nav" aria-label="Navegación principal">
-        <a href="./index.html" class="nav-link nav-link--active">Consulta</a>
-        <a href="./horarios.html" class="nav-link">Horarios</a>
-        <a href="./contactenos.html" class="nav-link">Contáctenos</a>
-        <button type="button" id="btn-planes" class="btn-planes" aria-expanded="false" aria-controls="panel-planes">
-          <span class="btn-planes-icon" aria-hidden="true">💪</span>
-          <span>Planes</span>
-        </button>
-      </nav>
     </div>
   </header>
 
-  <aside id="sidebar" class="sidebar" aria-label="Menú de navegación" aria-hidden="true">
+  <aside id="sidebar" class="sidebar" aria-label="Menú de navegación" aria-hidden="true" inert>
     <div class="sidebar-inner">
       <button type="button" class="sidebar-cerrar" id="sidebar-cerrar" aria-label="Cerrar menú">
         <span aria-hidden="true">×</span>
       </button>
       <nav class="sidebar-nav" aria-label="Enlaces del menú">
-        <a href="./index.html" class="sidebar-link sidebar-link--active">Consulta</a>
-        <a href="./horarios.html" class="sidebar-link">Horarios</a>
-        <a href="./contactenos.html" class="sidebar-link">Contáctenos</a>
-        <button type="button" id="btn-planes-sidebar" class="sidebar-btn-planes">
-          <span class="btn-planes-icon">💪</span>
-          <span>Planes</span>
-        </button>
+        <a href="./index.html" class="sidebar-link sidebar-link--active" aria-current="page" data-nav="index">Inicio</a>
+        <a href="./horarios.html" class="sidebar-link" data-nav="horarios">Horarios</a>
+        <a href="./contactenos.html" class="sidebar-link" data-nav="contactenos">Contáctenos</a>
+        <button type="button" id="btn-planes-sidebar" class="sidebar-btn-planes">Planes</button>
+        <a href="./index.html#consulta" class="sidebar-link sidebar-consulta">Consultar membresía</a>
       </nav>
     </div>
     <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
   </aside>
 
-  <div id="panel-planes" class="panel-planes" role="dialog" aria-labelledby="panel-planes-titulo" aria-hidden="true">
+  <div id="panel-planes" class="panel-planes" aria-labelledby="panel-planes-titulo" aria-hidden="true" inert>
     <div class="panel-planes-inner">
       <div class="panel-planes-header">
         <h2 id="panel-planes-titulo" class="panel-planes-titulo">Planes disponibles</h2>
@@ -71,53 +87,246 @@
     </div>
   </div>
 
-  <div class="app-shell">
-    <main id="consulta" class="card">
-      <header class="card-header">
-        <img src="./assets/logo-fd.jpeg" alt="Fuerza Delta" class="logo-img" loading="lazy" />
-        <div class="brand-text">
-          <div class="brand-title">Fuerza Delta</div>
-          <div class="brand-subtitle">Consulta de membresías</div>
+  <main id="contenido" class="app-shell">
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="hero-fotos" aria-hidden="true">
+        <img src="./assets/FD9.jpg" alt="" class="hero-foto" width="1206" height="1370" fetchpriority="high" />
+        <img src="./assets/FD8.jpg" alt="" class="hero-foto" width="1206" height="1503" />
+        <img src="./assets/FD10.jpeg" alt="" class="hero-foto" width="1122" height="1402" />
+      </div>
+
+      <div class="hero-contenido contenedor">
+        <p class="eyebrow">Apartadó · Antioquia</p>
+        <h1 id="hero-titulo" class="hero-titulo">
+          <span class="hero-titulo-linea">Fuerza</span>
+          <span class="hero-titulo-linea hero-titulo-linea--acento">Delta</span>
+        </h1>
+        <p class="hero-lema">Entrena fuerte. Entrena en comunidad.</p>
+        <div class="hero-acciones">
+          <a href="#consulta" class="btn btn--primario">Consulta tu membresía</a>
+          <a href="#nuestros-planes" class="btn btn--fantasma">Ver planes</a>
         </div>
-      </header>
+      </div>
 
-      <h1 class="title">Consulta el estado de tu membresía</h1>
-      <p class="subtitle">
-        Ingresa el número de celular con el que diste de alta tu membresía en
-        el gimnasio.
-      </p>
+      <span class="hero-chevron" aria-hidden="true"></span>
+    </section>
 
-      <form id="consulta-form">
-        <label for="telefono">Número de celular</label>
-        <div class="input-row">
-          <input type="tel" id="telefono" name="telefono" autocomplete="tel" placeholder="Ej. 3113215432" required />
-          <button type="submit" id="btn-consultar">
-            <span class="button-icon">🔍</span>
-            <span>Consultar</span>
-          </button>
+    <section id="consulta" class="seccion-consulta" aria-labelledby="titulo-consulta">
+      <div class="consulta-tarjeta">
+        <div class="consulta-encabezado">
+          <p class="eyebrow eyebrow--oscuro">Socios</p>
+          <h2 id="titulo-consulta" class="consulta-titulo">Consulta el estado de tu membresía</h2>
+          <p class="consulta-subtitulo">
+            Escribe el número de celular con el que te registraste en el gimnasio.
+          </p>
         </div>
-      </form>
 
-      <p id="helper" class="helper">
-        Solo lectura: esta página <strong>no</strong> modifica tu membresía.
-      </p>
+        <form id="consulta-form" class="consulta-form">
+          <label for="telefono" class="consulta-label">Número de celular</label>
+          <div class="input-row">
+            <input type="tel" id="telefono" name="telefono" class="consulta-input" autocomplete="tel" inputmode="numeric" maxlength="20" placeholder="Ej. 3113215432" required />
+            <button type="submit" id="btn-consultar" class="btn btn--primario consulta-boton">Consultar</button>
+          </div>
+        </form>
 
-      <p id="status" class="status status--info"></p>
+        <p id="helper" class="helper">
+          Solo lectura: esta página <strong>no</strong> modifica tu membresía.
+        </p>
 
-      <section id="resultado" class="resultado" aria-live="polite"></section>
+        <p id="status" class="status status--info" role="status"></p>
 
-      <p class="footnote">
-        Si tienes dudas sobre tu membresía, por favor comunícate directamente
-        con Fuerza Delta al <b>WhatsApp <a href="https://wa.me/573012796566?text=Estoy%20interesado%20en%20entrenar%20en%20Fuerza%20Delta%20%F0%9F%92%AA" target="_blank" rel="noopener noreferrer"
-            class="footnote-link">3012796566</a>.</b>
-      </p>
-    </main>
-  </div>
+        <section id="resultado" class="resultado" aria-live="polite"></section>
 
-  <script src="./js/transitions.js"></script>
-  <script src="./js/nav.js"></script>
-  <script type="module" src="./js/planes-panel.js"></script>
-  <script type="module" src="./js/consulta.js"></script>
+        <p class="consulta-ayuda">
+          ¿Dudas con tu membresía? Escríbenos al
+          <a href="https://wa.me/573103982286?text=Estoy%20interesado%20en%20entrenar%20en%20Fuerza%20Delta%20%F0%9F%92%AA" target="_blank" rel="noopener noreferrer">WhatsApp 310 398 2286</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="seccion seccion-comunidad" aria-labelledby="titulo-comunidad">
+      <div class="contenedor">
+        <header class="seccion-encabezado" data-revelar>
+          <p class="eyebrow">Comunidad</p>
+          <h2 id="titulo-comunidad" class="seccion-titulo">Aquí nadie entrena solo</h2>
+          <p class="seccion-texto">
+            Madrugadas, noches y fines de semana: cada clase es una razón más para volver.
+          </p>
+        </header>
+
+        <div class="galeria" id="galeria">
+          <a href="./assets/FD3.jpeg" class="galeria-item galeria-item--ancha" data-revelar>
+            <img src="./assets/FD3.jpeg" alt="Grupo de socios de Fuerza Delta en el gimnasio sosteniendo la bandera del gimnasio" width="1280" height="720" loading="lazy" />
+          </a>
+          <a href="./assets/FD2.jpeg" class="galeria-item galeria-item--alta" data-revelar>
+            <img src="./assets/FD2.jpeg" alt="Socios celebrando bajo el letrero de Fuerza Delta" width="960" height="1280" loading="lazy" />
+          </a>
+          <a href="./assets/FD5.jpeg" class="galeria-item" data-revelar>
+            <img src="./assets/FD5.jpeg" alt="Socios mostrando los bíceps al terminar la clase" width="1280" height="960" loading="lazy" />
+          </a>
+          <a href="./assets/FD6.jpeg" class="galeria-item" data-revelar>
+            <img src="./assets/FD6.jpeg" alt="Grupo de Fuerza Delta después de un entrenamiento nocturno al aire libre" width="960" height="1280" loading="lazy" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-competencias" aria-labelledby="titulo-competencias">
+      <div class="contenedor competencias">
+        <figure class="competencias-foto" data-revelar>
+          <img src="./assets/FD7.jpg" alt="Atletas de Fuerza Delta corriendo durante una competencia" width="1206" height="1500" loading="lazy" />
+        </figure>
+        <div class="competencias-texto" data-revelar>
+          <p class="eyebrow">Competencias</p>
+          <h2 id="titulo-competencias" class="seccion-titulo">Del box a la línea de salida</h2>
+          <p class="seccion-texto">
+            Nuestros atletas llevan el nombre de Fuerza Delta a cada competencia. Entrenamos
+            juntos, competimos juntos y celebramos juntos.
+          </p>
+          <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer" class="btn btn--fantasma">Síguenos en Instagram</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="nuestros-planes" class="seccion seccion-planes" aria-labelledby="titulo-planes">
+      <div class="contenedor">
+        <header class="seccion-encabezado" data-revelar>
+          <p class="eyebrow eyebrow--oscuro">Planes</p>
+          <h2 id="titulo-planes" class="seccion-titulo">Elige tu plan</h2>
+          <p class="seccion-texto">Precios vigentes. Escríbenos y te ayudamos a empezar.</p>
+        </header>
+
+        <div id="planes-grid" class="planes-grid" aria-live="polite">
+          <p class="planes-mensaje">Cargando planes…</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion seccion-horarios" aria-labelledby="titulo-horarios">
+      <div class="contenedor">
+        <header class="seccion-encabezado" data-revelar>
+          <p class="eyebrow">Horarios</p>
+          <h2 id="titulo-horarios" class="seccion-titulo">Clases de una hora</h2>
+          <p class="seccion-texto">Escoge el bloque que mejor se acomode a tu día.</p>
+        </header>
+
+        <div class="horarios-grid">
+          <article class="horario" data-revelar>
+            <span class="horario-etiqueta">Lunes a viernes</span>
+            <h3 class="horario-titulo">Mañana</h3>
+            <p class="horario-rango">5:00 a.m. – 9:00 a.m.</p>
+            <ul class="horario-clases" aria-label="Clases de la mañana">
+              <li>5:00</li>
+              <li>6:00</li>
+              <li>7:00</li>
+              <li>8:00</li>
+            </ul>
+          </article>
+
+          <article class="horario" data-revelar>
+            <span class="horario-etiqueta">Lunes a viernes</span>
+            <h3 class="horario-titulo">Tarde</h3>
+            <p class="horario-rango">5:00 p.m. – 9:00 p.m.</p>
+            <ul class="horario-clases" aria-label="Clases de la tarde">
+              <li>5:00</li>
+              <li>6:00</li>
+              <li>7:00</li>
+              <li>8:00</li>
+            </ul>
+          </article>
+
+          <article class="horario" data-revelar>
+            <span class="horario-etiqueta">Sábados</span>
+            <h3 class="horario-titulo">Fin de semana</h3>
+            <p class="horario-rango">6:00 a.m. – 8:00 a.m.</p>
+            <ul class="horario-clases" aria-label="Clases del sábado">
+              <li>6:00</li>
+              <li>7:00</li>
+            </ul>
+          </article>
+
+          <article class="horario" data-revelar>
+            <span class="horario-etiqueta">Bloque único</span>
+            <h3 class="horario-titulo">Festivos</h3>
+            <p class="horario-rango">8:00 a.m. – 9:00 a.m.</p>
+            <p class="horario-nota">Verifica en recepción qué días aplica.</p>
+          </article>
+        </div>
+
+        <p class="seccion-pie">
+          Los horarios pueden ajustarse en días especiales.
+          <a href="./horarios.html">Ver página de horarios</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="seccion seccion-contacto" aria-labelledby="titulo-contacto">
+      <div class="contenedor">
+        <header class="seccion-encabezado" data-revelar>
+          <p class="eyebrow">Contacto</p>
+          <h2 id="titulo-contacto" class="seccion-titulo">Ven a entrenar</h2>
+          <p class="seccion-texto">Escríbenos o visítanos. Te esperamos.</p>
+        </header>
+
+        <div class="contacto-grid">
+          <a href="https://wa.me/573103982286?text=Estoy%20interesado%20en%20entrenar%20en%20Fuerza%20Delta%20%F0%9F%92%AA" target="_blank" rel="noopener noreferrer" class="contacto-item contacto-item--whatsapp" data-revelar>
+            <span class="contacto-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <path d="M9.2 8.6c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.6 1.5c.1.2 0 .5-.1.6l-.5.6c.6 1.1 1.4 1.9 2.5 2.5l.6-.5c.2-.2.4-.2.6-.1l1.5.6c.3.1.4.3.4.5v.5c0 .3 0 .6-.5.8-.6.3-1.6.4-2.9-.2-1.6-.7-3-2.1-3.7-3.7-.6-1.3-.5-2.3-.2-2.9z" fill="currentColor" />
+              </svg>
+            </span>
+            <span class="contacto-texto">
+              <strong>WhatsApp</strong>
+              <span>310 398 2286</span>
+            </span>
+          </a>
+
+          <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer" class="contacto-item contacto-item--instagram" data-revelar>
+            <span class="contacto-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" />
+              </svg>
+            </span>
+            <span class="contacto-texto">
+              <strong>Instagram</strong>
+              <span>@fuerzadeltaapartado</span>
+            </span>
+          </a>
+
+          <a href="https://maps.app.goo.gl/736kUSpa4ATETqVJA" target="_blank" rel="noopener noreferrer" class="contacto-item contacto-item--mapa" data-revelar>
+            <span class="contacto-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+                <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+            </span>
+            <span class="contacto-texto">
+              <strong>Ubicación</strong>
+              <span>Apartadó, Antioquia · Ver en Google Maps</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <img src="./assets/logo-fd.jpeg" alt="Fuerza Delta" class="footer-logo" width="1536" height="926" loading="lazy" />
+      <nav class="footer-nav" aria-label="Enlaces del pie de página">
+        <a href="./index.html#consulta">Consultar membresía</a>
+        <a href="./horarios.html">Horarios</a>
+        <a href="./contactenos.html">Contáctenos</a>
+        <a href="https://www.instagram.com/fuerzadeltaapartado" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+      <p class="footer-texto">Fuerza Delta · Apartadó, Antioquia</p>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/pages/inicio.js"></script>
 </body>
 
 </html>

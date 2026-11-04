@@ -1,0 +1,24 @@
+{
+  "name": "checkmensualidad",
+  "version": "1.0.0",
+  "description": "Consulta de membresías del gimnasio Fuerza Delta",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:check": "node scripts/build.mjs --check",
+    "dev": "node scripts/dev.mjs",
+    "migrar-telefonos": "node scripts/migrar-telefonos.mjs",
+    "test": "node --test \"tests/*.test.js\"",
+    "lint": "eslint .",
+    "verify": "npm run build:check && npm run lint && npm test"
+  },
+  "devDependencies": {
+    "eslint": "^10.8.1",
+    "firebase-admin": "^14.2.0",
+    "globals": "^17.11.0"
+  }
+}
