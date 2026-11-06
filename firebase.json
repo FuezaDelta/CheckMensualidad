@@ -14,7 +14,10 @@
       "eslint.config.mjs",
       "firestore.rules",
       "firestore.indexes.json",
-      "README.md"
+      "README.md",
+      "assets-originales/**",
+      "clave-servicio.json",
+      "**/*-firebase-adminsdk-*.json"
     ],
     "cleanUrls": false,
     "headers": [

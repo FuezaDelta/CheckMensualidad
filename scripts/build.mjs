@@ -193,6 +193,8 @@ async function construirPaginas(sitio, parciales) {
     html = aplicarVariables(html, {
       ...sitio,
       ...metadatos,
+      // Título para redes sociales; si la página no declara uno, usa el de la pestaña.
+      ogTitle: metadatos.ogTitle ?? metadatos.title,
       page: pagina,
       canonical: pagina === "index" ? "" : archivo,
     });

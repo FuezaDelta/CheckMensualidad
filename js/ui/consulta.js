@@ -3,10 +3,10 @@
  */
 
 import { EstadoMembresia } from "../domain/membresia.js";
-import { crear, porId, reemplazarContenido } from "../lib/dom.js";
-import { formatearFecha } from "../lib/format.js";
+import { porId, reemplazarContenido } from "../lib/dom.js";
 import { CodigoError } from "../services/errores.js";
 import { consultarMembresia } from "../services/membresias.js";
+import { pintarResultado } from "./resultado-membresia.js";
 
 const MENSAJE_INICIAL = "Escribe tu número de celular y presiona Consultar.";
 const MENSAJE_BUSCANDO = "Buscando membresía...";
@@ -25,16 +25,6 @@ const MENSAJES_ERROR = Object.freeze({
     "Se hicieron muchas consultas seguidas. Espera un minuto y vuelve a intentarlo.",
   [CodigoError.DESCONOCIDO]:
     "Ocurrió un error al consultar la membresía. Intenta de nuevo en unos momentos.",
-});
-
-const ETIQUETAS_ESTADO = Object.freeze({
-  [EstadoMembresia.ACTIVA]: "ACTIVA",
-  [EstadoMembresia.VENCIDA]: "VENCIDA",
-});
-
-const CLASES_ESTADO = Object.freeze({
-  [EstadoMembresia.ACTIVA]: "activa",
-  [EstadoMembresia.VENCIDA]: "vencida",
 });
 
 export function crearFormularioConsulta() {
@@ -57,29 +47,10 @@ export function crearFormularioConsulta() {
   }
 
   function limpiarResultado() {
-    resultado.classList.remove("visible");
+    // Quitar la variante y ocultar la tarjeta hace que la próxima consulta
+    // vuelva a reproducir las animaciones desde el principio.
+    resultado.className = "resultado";
     reemplazarContenido(resultado, []);
-  }
-
-  /**
-   * @param {import("../domain/membresia.js").Membresia} membresia
-   */
-  function mostrarResultado(membresia) {
-    const encabezado = crear("div", { clase: "resultado-header" }, [
-      crear("div", { clase: "resultado-nombre", texto: membresia.nombreCompleto }),
-      crear("span", {
-        clase: `badge-estado ${CLASES_ESTADO[membresia.estado]}`,
-        texto: ETIQUETAS_ESTADO[membresia.estado],
-      }),
-    ]);
-
-    const vencimiento = crear("p", { clase: "resultado-item" }, [
-      crear("strong", { texto: "Fecha de vencimiento:" }),
-      ` ${formatearFecha(membresia.fechaFin)}`,
-    ]);
-
-    reemplazarContenido(resultado, [encabezado, vencimiento]);
-    resultado.classList.add("visible");
   }
 
   async function alEnviar(evento) {
@@ -103,7 +74,7 @@ export function crearFormularioConsulta() {
       }
 
       mostrarEstado(MENSAJE_ENCONTRADA);
-      mostrarResultado(membresia);
+      pintarResultado(resultado, membresia);
     } catch (error) {
       if (consulta !== consultaActual) return;
 

@@ -660,63 +660,444 @@ body.sidebar-open {
   z-index: -2;
 }
 
+/* Cada foto tiene varias capas: un fondo desenfocado que llena el hero, la
+   foto nítida y, a los lados, la anterior y la siguiente. Las fotos son
+   verticales y el hero, en pantallas horizontales, es una franja ancha: si la
+   foto lo llenara con `cover` solo quedaría visible una tira del centro. Por
+   eso en esas pantallas la foto se muestra completa dentro de un celular
+   dibujado, como una publicación. En pantallas verticales la foto nítida sí
+   llena el hero y las demás capas no hacen falta. */
 .hero-foto {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
+  overflow: hidden;
   opacity: 0;
-  filter: grayscale(0.35) contrast(1.08);
 }
 
 .hero-foto:first-child {
   opacity: 1;
 }
 
-/* Las tres fotos se turnan con un fundido y un acercamiento lento. Cada una
-   arranca desfasada un tercio del ciclo; los retrasos negativos hacen que la
-   primera ya esté visible al cargar la página. */
+.hero-foto-fondo,
+.hero-foto-tira,
+.telefono {
+  display: none;
+}
+
+.hero-foto-frente {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: grayscale(0.35) contrast(1.08);
+}
+
+@media (min-aspect-ratio: 5 / 4) and (min-width: 901px) {
+  .hero-foto-fondo {
+    display: block;
+    position: absolute;
+    /* El desenfoque deja los bordes translúcidos; se agranda para ocultarlos. */
+    inset: -60px;
+    width: calc(100% + 120px);
+    height: calc(100% + 120px);
+    object-fit: cover;
+    filter: blur(28px) grayscale(0.4) brightness(0.45);
+  }
+
+  /* Geometría del celular. Todas las capas (las fotos de cada diapositiva y
+     el marco del celular) se colocan con estas mismas medidas, así que la
+     foto nítida cae exactamente en el hueco de la pantalla. Las unidades cq
+     se refieren a .hero-fotos, que mide lo mismo que el hero. */
+  .hero-fotos {
+    container-type: size;
+
+    /* Cabe entre la cabecera y la tarjeta de consulta, que se monta sobre la
+       parte baja del hero. */
+    --tel-alto: min(640px, calc(100cqh - var(--alto-header) - 196px));
+    --tel-ancho: calc(var(--tel-alto) * 0.49);
+    --tel-arriba: calc(var(--alto-header) + 28px);
+    /* Alineado con el contenido, dejando sitio a la tira de la derecha. */
+    --tel-derecha: calc(max(0px, (100cqw - var(--ancho-max)) / 2) + 20px + clamp(40px, 7cqw, 150px));
+    --tel-bisel: 9px;
+    /* Barra de estado (30px) + cabecera de la publicación (54px). */
+    --tel-cabecera: 84px;
+    --foto-ancho: calc(var(--tel-ancho) - 2 * var(--tel-bisel));
+    --foto-alto: calc(var(--foto-ancho) * 1.25);
+    --foto-arriba: calc(var(--tel-arriba) + var(--tel-bisel) + var(--tel-cabecera));
+    --foto-derecha: calc(var(--tel-derecha) + var(--tel-bisel));
+    --tira-ancho: calc(var(--foto-ancho) * 0.78);
+  }
+
+  .hero-foto-frente {
+    inset: auto;
+    top: var(--foto-arriba);
+    right: var(--foto-derecha);
+    width: var(--foto-ancho);
+    height: var(--foto-alto);
+    object-position: center;
+    filter: grayscale(0.1) contrast(1.05);
+  }
+
+  /* La foto anterior y la siguiente, a los lados del celular, como una tira
+     de carrusel que continúa fuera de la pantalla. */
+  .hero-foto-tira {
+    display: block;
+    position: absolute;
+    top: var(--foto-arriba);
+    width: var(--tira-ancho);
+    height: var(--foto-alto);
+    object-fit: cover;
+    filter: brightness(0.5) grayscale(0.3);
+  }
+
+  .hero-foto-tira--anterior {
+    right: calc(var(--tel-derecha) + var(--tel-ancho));
+    border-radius: var(--radio) 0 0 var(--radio);
+  }
+
+  .hero-foto-tira--siguiente {
+    right: calc(var(--tel-derecha) - var(--tira-ancho));
+    border-radius: 0 var(--radio) var(--radio) 0;
+  }
+
+  /* Marco del celular. El centro queda transparente: ahí se ve la foto de la
+     diapositiva activa, que está debajo. */
+  .telefono {
+    position: absolute;
+    top: var(--tel-arriba);
+    right: var(--tel-derecha);
+    display: flex;
+    flex-direction: column;
+    width: var(--tel-ancho);
+    height: var(--tel-alto);
+    overflow: hidden;
+    border: var(--tel-bisel) solid #0a0a0a;
+    border-radius: 44px;
+    box-shadow:
+      0 0 0 1px rgba(241, 234, 219, 0.16),
+      0 30px 80px rgba(0, 0, 0, 0.7);
+    color: var(--crema);
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .telefono-arriba,
+  .telefono-abajo {
+    background: #0c0c0b;
+  }
+
+  .telefono-arriba {
+    flex: none;
+    height: var(--tel-cabecera);
+  }
+
+  .telefono-estado {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    padding: 4px 22px 0;
+    font-weight: 600;
+  }
+
+  .telefono-isla {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 70px;
+    height: 20px;
+    border-radius: 999px;
+    background: #000;
+    transform: translateX(-50%);
+  }
+
+  .telefono-bateria {
+    position: relative;
+    width: 20px;
+    height: 10px;
+    border: 1.5px solid currentColor;
+    border-radius: 3px;
+    opacity: 0.9;
+  }
+
+  .telefono-bateria::after {
+    content: "";
+    position: absolute;
+    inset: 1px 30% 1px 1px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+
+  .telefono-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 54px;
+    padding: 0 12px;
+  }
+
+  .telefono-avatar,
+  .telefono-perfil {
+    flex: none;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .telefono-avatar {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    background: linear-gradient(45deg, var(--oliva-oscuro), var(--oliva-claro), var(--crema));
+  }
+
+  .telefono-perfil {
+    width: 22px;
+    height: 22px;
+  }
+
+  .telefono-cuenta {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .telefono-cuenta strong,
+  .telefono-cuenta span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .telefono-cuenta strong {
+    font-size: 11.5px;
+  }
+
+  .telefono-cuenta span {
+    font-size: 10px;
+    color: var(--crema-suave);
+  }
+
+  .telefono-mas {
+    font-size: 10px;
+    letter-spacing: 1px;
+    opacity: 0.8;
+  }
+
+  .telefono-foto {
+    flex: none;
+    height: var(--foto-alto);
+  }
+
+  .telefono-abajo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    padding: 9px 12px 0;
+    overflow: hidden;
+  }
+
+  .telefono svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .telefono-acciones {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .telefono-acciones svg:last-child {
+    margin-left: auto;
+  }
+
+  .telefono .telefono-like {
+    fill: #ff3b4f;
+    stroke: #ff3b4f;
+  }
+
+  .telefono-puntos {
+    position: absolute;
+    left: 50%;
+    display: flex;
+    gap: 4px;
+    transform: translateX(-50%);
+  }
+
+  .telefono-puntos span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(241, 234, 219, 0.35);
+  }
+
+  .telefono-puntos span:first-child {
+    background: var(--oliva-claro);
+  }
+
+  .telefono-texto {
+    margin-top: 8px;
+    color: var(--crema-suave);
+  }
+
+  .telefono-texto strong {
+    margin-right: 4px;
+    color: var(--crema);
+  }
+
+  .telefono-barra {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-around;
+    height: 44px;
+    margin: auto -12px 0;
+    border-top: 1px solid rgba(241, 234, 219, 0.08);
+  }
+}
+
+/* Entre 901 y 1100 px el texto de la izquierda ocupa más proporción del hero
+   y la tira anterior lo rozaría. */
+@media (min-aspect-ratio: 5 / 4) and (min-width: 901px) and (max-width: 1100px) {
+  .hero-foto-tira--anterior {
+    display: none;
+  }
+}
+
+@media (min-aspect-ratio: 5 / 4) and (min-width: 901px) {
+
+  /* El texto queda a la izquierda: se oscurece ese lado y se deja la foto
+     nítida casi intacta. */
+  .hero::before {
+    background:
+      linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.35) 45%, rgba(7, 7, 7, 0) 60%),
+      linear-gradient(0deg, var(--negro) 2%, rgba(7, 7, 7, 0) 20%),
+      linear-gradient(160deg, rgba(109, 124, 61, 0.3), transparent 50%);
+  }
+}
+
+/* Las seis fotos se turnan con un fundido y un acercamiento lento: 6 s cada
+   una en un ciclo de 36 s. Cada una arranca desfasada un sexto del ciclo; el
+   retraso negativo de la primera (el tiempo de su fundido de entrada) hace que
+   ya esté visible al cargar la página. Al cambiar el número de fotos hay que
+   ajustar la duración, los retrasos y los porcentajes de las animaciones.
+
+   El retraso va en una variable para que la capa y la foto que se acerca
+   compartan exactamente el mismo reloj. */
+.hero-foto:nth-child(1),
+.telefono-puntos span:nth-child(1) {
+  --retraso: -1.44s;
+}
+
+.hero-foto:nth-child(2),
+.telefono-puntos span:nth-child(2) {
+  --retraso: 4.56s;
+}
+
+.hero-foto:nth-child(3),
+.telefono-puntos span:nth-child(3) {
+  --retraso: 10.56s;
+}
+
+.hero-foto:nth-child(4),
+.telefono-puntos span:nth-child(4) {
+  --retraso: 16.56s;
+}
+
+.hero-foto:nth-child(5),
+.telefono-puntos span:nth-child(5) {
+  --retraso: 22.56s;
+}
+
+.hero-foto:nth-child(6),
+.telefono-puntos span:nth-child(6) {
+  --retraso: 28.56s;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero-foto {
-    animation: hero-rotacion 18s linear infinite;
+    animation: hero-rotacion 36s linear var(--retraso) infinite;
   }
 
-  .hero-foto:nth-child(1) {
-    animation-delay: -1.44s;
+  /* Los puntos de la publicación siguen a la foto activa con el mismo reloj. */
+  .telefono-puntos span {
+    animation: telefono-punto 36s linear var(--retraso) infinite;
   }
 
-  .hero-foto:nth-child(2) {
-    animation-delay: 4.56s;
+  .hero-foto-frente {
+    animation: hero-acercamiento 36s linear var(--retraso) infinite;
+  }
+}
+
+/* Dentro del celular, el acercamiento sacaría la foto del hueco de la
+   pantalla: solo se acerca el fondo. */
+@media (prefers-reduced-motion: no-preference) and (min-aspect-ratio: 5 / 4) and (min-width: 901px) {
+  .hero-foto-frente {
+    animation: none;
   }
 
-  .hero-foto:nth-child(3) {
-    animation-delay: 10.56s;
+  .hero-foto-fondo {
+    animation: hero-acercamiento 36s linear var(--retraso) infinite;
   }
 }
 
 @keyframes hero-rotacion {
   0% {
     opacity: 0;
-    transform: scale(1.14);
   }
 
-  8% {
+  4% {
     opacity: 1;
   }
 
-  33% {
+  16.67% {
     opacity: 1;
   }
 
-  41% {
+  20.67% {
     opacity: 0;
-    transform: scale(1.02);
   }
 
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes telefono-punto {
+  0%,
+  20.67%,
+  100% {
+    background: rgba(241, 234, 219, 0.35);
+  }
+
+  2%,
+  18.67% {
+    background: var(--oliva-claro);
+  }
+}
+
+@keyframes hero-acercamiento {
+  0% {
+    transform: scale(1.14);
+  }
+
+  20.67% {
+    transform: scale(1.02);
+  }
+
+  100% {
     transform: scale(1.02);
   }
 }
@@ -967,14 +1348,83 @@ form[aria-busy="true"] .consulta-boton {
 }
 
 .resultado.visible {
+  --anillo: rgba(151, 166, 74, 0.35);
+
+  position: relative;
   display: block;
   margin-top: 16px;
   padding: 20px 22px;
+  overflow: hidden;
   border-radius: 16px;
   background: var(--negro-2);
   color: var(--crema);
-  box-shadow: inset 0 0 0 1px rgba(151, 166, 74, 0.35);
+  box-shadow: inset 0 0 0 1px var(--anillo);
   animation: aparecer-resultado 0.45s var(--curva) both;
+}
+
+/* Cada variante tiene su color y su gesto (js/ui/resultado-membresia.js). */
+.resultado--activa {
+  --acento: var(--oliva-claro);
+}
+
+.resultado--por-vencer {
+  --acento: #f5b544;
+  --anillo: rgba(245, 181, 68, 0.45);
+}
+
+.resultado--vencida {
+  --acento: var(--peligro-claro);
+  --anillo: rgba(249, 112, 102, 0.35);
+}
+
+.resultado.resultado--activa {
+  animation:
+    aparecer-resultado 0.45s var(--curva) both,
+    resultado-brillo 1.3s ease 0.6s;
+}
+
+.resultado.resultado--por-vencer {
+  animation:
+    aparecer-resultado 0.45s var(--curva) both,
+    resultado-brillo 1s ease 0.6s 2;
+}
+
+/* Como un candado que no abre: corta y sin destellos. */
+.resultado.resultado--vencida {
+  animation:
+    aparecer-resultado 0.45s var(--curva) both,
+    resultado-sacudida 0.5s ease 0.55s;
+}
+
+@keyframes resultado-brillo {
+  40% {
+    box-shadow:
+      inset 0 0 0 2px var(--acento),
+      0 0 32px 2px color-mix(in srgb, var(--acento) 45%, transparent);
+  }
+}
+
+@keyframes resultado-sacudida {
+  0%,
+  100% {
+    transform: none;
+  }
+
+  20% {
+    transform: translateX(-8px);
+  }
+
+  40% {
+    transform: translateX(7px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
 }
 
 @keyframes aparecer-resultado {
@@ -1004,36 +1454,228 @@ form[aria-busy="true"] .consulta-boton {
   letter-spacing: 0.03em;
 }
 
-.badge-estado {
+/* El nombre entra letra por letra; el retardo se topa para que los nombres
+   largos no tarden más de la cuenta. */
+.resultado-palabra {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.resultado-letra {
+  display: inline-block;
+  animation: letra-subir 0.5s var(--curva) both;
+  animation-delay: calc(min(var(--i) * 22ms, 600ms) + 0.1s);
+}
+
+@keyframes letra-subir {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em) rotate(6deg);
+  }
+}
+
+/* Sello del estado: cae grande, rebota y se asienta. Fondos oscuros para que
+   el texto claro cumpla el contraste AA. */
+.sello {
+  --giro: 0deg;
+
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
+  gap: 7px;
+  padding: 7px 14px 7px 10px;
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: sello-caer 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) 0.25s both;
 }
 
-.badge-estado::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-/* Colores de fondo oscuros para que el texto claro cumpla el contraste AA. */
-.badge-estado.activa {
+.resultado--activa .sello {
   background: var(--oliva-oscuro);
   color: #f6f9ea;
   box-shadow: 0 0 0 1px var(--oliva-claro);
 }
 
-.badge-estado.vencida {
+.resultado--por-vencer .sello {
+  background: #6e4405;
+  color: #fff6e5;
+  box-shadow: 0 0 0 1px #f5b544;
+}
+
+.resultado--vencida .sello {
+  --giro: -4deg;
+
   background: #8f1d16;
   color: #fff4f2;
   box-shadow: 0 0 0 1px var(--peligro-claro);
+}
+
+@keyframes sello-caer {
+  from {
+    opacity: 0;
+    transform: scale(2.2) rotate(-14deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(0.92) rotate(var(--giro));
+  }
+
+  to {
+    transform: scale(1) rotate(var(--giro));
+  }
+}
+
+.sello-icono {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Se dibuja el trazo cuando el sello ya se asentó. */
+.sello-icono path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: trazo-dibujar 0.4s ease-out 0.7s forwards;
+}
+
+@keyframes trazo-dibujar {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Chevrones del logo saliendo del sello cuando la membresía está activa. */
+.estallido {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.estallido-chevron {
+  position: absolute;
+  top: -6px;
+  left: -8px;
+  width: 16px;
+  height: 13px;
+  background: var(--oliva-claro);
+  clip-path: polygon(50% 0, 100% 62%, 82% 100%, 50% 46%, 18% 100%, 0 62%);
+  animation: chevron-volar 0.9s cubic-bezier(0.15, 0.8, 0.3, 1) calc(0.55s + var(--retraso)) both;
+}
+
+.estallido-chevron:nth-child(even) {
+  background: var(--crema);
+}
+
+@keyframes chevron-volar {
+  from {
+    opacity: 0;
+    transform: rotate(var(--angulo)) translateY(0) scale(0.4);
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: rotate(var(--angulo)) translateY(calc(var(--distancia) * -1)) scale(1);
+  }
+}
+
+/* Días restantes o desde que venció. */
+.resultado-dias {
+  margin-top: 14px;
+}
+
+.resultado-dias-texto {
+  color: var(--crema-suave);
+}
+
+.resultado-contador {
+  font-family: var(--fuente-titulos);
+  font-size: 2.1rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  vertical-align: -0.12em;
+  color: var(--acento);
+}
+
+.resultado-barra {
+  display: block;
+  height: 6px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(241, 234, 219, 0.1);
+}
+
+.resultado-barra-relleno {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--acento);
+  transform: scaleX(var(--proporcion));
+  transform-origin: left;
+  animation: barra-llenar 0.9s var(--curva) 0.45s both;
+}
+
+/* Vencida: la barra estaba llena y se vacía. */
+.resultado--vencida .resultado-barra-relleno {
+  animation: barra-vaciar 1.1s ease-in 0.5s both;
+}
+
+@keyframes barra-llenar {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes barra-vaciar {
+  from {
+    transform: scaleX(1);
+  }
+}
+
+.resultado-mensaje {
+  margin-top: 14px;
+  font-weight: 600;
+  color: var(--crema);
+  animation: aparecer-resultado 0.4s var(--curva) 0.9s both;
+}
+
+.resultado-whatsapp {
+  margin-top: 12px;
+  min-height: 46px;
+  padding: 8px 22px;
+  font-size: 1.25rem;
+  background: #1f8f4e;
+  color: #fff;
+  animation: aparecer-resultado 0.4s var(--curva) 1.05s both;
+}
+
+.resultado-whatsapp:hover,
+.resultado-whatsapp:focus-visible {
+  background: #187a41;
+}
+
+/* Texto solo para lectores de pantalla. */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .resultado-item {
@@ -1222,13 +1864,228 @@ form[aria-busy="true"] .consulta-boton {
   border-radius: var(--radio);
 }
 
-.competencias-foto img {
+/* Carrusel de competencias (js/ui/carrusel.js). Sin JavaScript sigue siendo
+   una tira deslizable gracias a scroll-snap. */
+.carrusel-pista {
   position: relative;
-  width: 100%;
+  display: flex;
   aspect-ratio: 4 / 5;
-  object-fit: cover;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
   border-radius: var(--radio);
   box-shadow: var(--sombra);
+  background: var(--negro-3);
+}
+
+.carrusel-pista::-webkit-scrollbar {
+  display: none;
+}
+
+.carrusel-pista:focus-visible {
+  outline: 3px solid var(--oliva-claro);
+  outline-offset: 4px;
+}
+
+.carrusel-foto {
+  flex: 0 0 100%;
+  margin: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.carrusel-foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fotos anterior y siguiente asomando detrás de la principal, como un mazo.
+   Solo con la sección en dos columnas: en una columna no hay margen lateral
+   y en el celular las fotos se pasan deslizando. */
+.carrusel-vecina {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .seccion-competencias {
+    overflow-x: clip;
+  }
+
+  .carrusel {
+    --asomar: clamp(34px, 3.4vw, 48px);
+  }
+
+  .carrusel-vecina {
+    --giro: 3deg;
+
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    display: block;
+    width: 62%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radio);
+    overflow: hidden;
+    background: var(--negro-3);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    filter: brightness(0.5) grayscale(0.35);
+    transition: transform 0.45s var(--curva), translate 0.45s var(--curva), filter 0.3s ease;
+  }
+
+  .carrusel-vecina img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carrusel-vecina--anterior {
+    --direccion: -1;
+    left: 0;
+    transform-origin: left center;
+    transform: translateX(calc(var(--asomar) * -1)) rotate(calc(var(--giro) * -1));
+  }
+
+  .carrusel-vecina--siguiente {
+    --direccion: 1;
+    right: 0;
+    transform-origin: right center;
+    transform: translateX(var(--asomar)) rotate(var(--giro));
+  }
+
+  /* `translate` se suma al `transform` base: sale 12 px más hacia su lado. */
+  .carrusel-vecina:hover {
+    translate: calc(var(--direccion) * 12px) 0;
+    filter: brightness(0.8) grayscale(0);
+  }
+
+  .carrusel-vecina--entrando {
+    animation: vecina-entrada 0.45s ease both;
+  }
+}
+
+/* Mientras el contenido llega casi al borde de la ventana, las vecinas se
+   saldrían por la izquierda y rozarían el texto por la derecha: se les deja
+   sitio dentro de la propia columna. */
+@media (min-width: 901px) and (max-width: 1299px) {
+  .carrusel {
+    margin-inline: calc(var(--asomar) + 12px);
+  }
+}
+
+@keyframes vecina-entrada {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.carrusel-flecha,
+.carrusel-pausa,
+.carrusel-punto {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--crema);
+}
+
+.carrusel-flecha {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  border-radius: 50%;
+  background: rgba(7, 7, 7, 0.55);
+  font-size: 1.9rem;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.carrusel-flecha--anterior {
+  left: 12px;
+}
+
+.carrusel-flecha--siguiente {
+  right: 12px;
+}
+
+.carrusel-flecha:hover,
+.carrusel-flecha:focus-visible {
+  background: var(--oliva);
+}
+
+.carrusel-controles {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px 4px 10px;
+  border-radius: 999px;
+  background: rgba(7, 7, 7, 0.55);
+  backdrop-filter: blur(6px);
+  transform: translateX(-50%);
+}
+
+.carrusel-puntos {
+  display: flex;
+  align-items: center;
+}
+
+.carrusel-punto {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 28px;
+  padding: 0;
+  background: none;
+}
+
+.carrusel-punto::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--crema-suave);
+  opacity: 0.55;
+  transition: width 0.3s var(--curva), background 0.3s ease, opacity 0.3s ease;
+}
+
+.carrusel-punto[aria-current="true"]::before {
+  width: 16px;
+  background: var(--oliva-claro);
+  opacity: 1;
+}
+
+.carrusel-pausa {
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: none;
+  font-size: 0.7rem;
+  letter-spacing: -1px;
+}
+
+.carrusel-pausa:hover,
+.carrusel-pausa:focus-visible,
+.carrusel-punto:focus-visible {
+  background: var(--oliva-velo);
+  border-radius: 50%;
 }
 
 .competencias-texto .btn {

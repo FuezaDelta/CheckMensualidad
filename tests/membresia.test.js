@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
+  DIAS_AVISO_VENCIMIENTO,
   EstadoMembresia,
   calcularEstado,
   componerNombre,
   crearMembresia,
+  diasRestantes,
   esEstadoValido,
 } from "../js/domain/membresia.js";
 
@@ -88,5 +90,25 @@ describe("esEstadoValido", () => {
     assert.equal(esEstadoValido("desconocido"), true);
     assert.equal(esEstadoValido("cualquier cosa"), false);
     assert.equal(esEstadoValido(undefined), false);
+  });
+});
+
+describe("diasRestantes", () => {
+  const VENCE = new Date("2026-08-14T05:00:00Z"); // 14 de agosto en Bogotá
+
+  it("cuenta el día del vencimiento como 0, igual que calcularEstado", () => {
+    const ultimaHora = new Date("2026-08-15T04:59:00Z"); // 14 de agosto, 23:59
+    assert.equal(diasRestantes(VENCE, ultimaHora), 0);
+    assert.equal(calcularEstado(VENCE, null, ultimaHora), EstadoMembresia.ACTIVA);
+  });
+
+  it("es positivo antes y negativo después del vencimiento", () => {
+    assert.equal(diasRestantes(VENCE, new Date("2026-08-09T15:00:00Z")), DIAS_AVISO_VENCIMIENTO);
+    assert.equal(diasRestantes(VENCE, new Date("2026-08-15T05:01:00Z")), -1);
+    assert.equal(diasRestantes(VENCE, new Date("2026-10-02T15:00:00Z")), -49);
+  });
+
+  it("no inventa días cuando no hay fecha", () => {
+    assert.equal(diasRestantes(null, new Date()), null);
   });
 });

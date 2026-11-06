@@ -31,6 +31,11 @@ export const config = Object.freeze({
     region: "us-central1",
   }),
 
+  contacto: Object.freeze({
+    /** WhatsApp del gimnasio en formato internacional, sin "+" ni espacios. */
+    whatsapp: "573103982286",
+  }),
+
   membresias: Object.freeze({
     /**
      * De dónde se leen las membresías:

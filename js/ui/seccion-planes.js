@@ -5,22 +5,8 @@
 
 import { crear, porId, reemplazarContenido } from "../lib/dom.js";
 import { formatearDuracion, formatearPrecio } from "../lib/format.js";
+import { enlaceWhatsapp } from "../lib/whatsapp.js";
 import { obtenerPlanesActivos } from "../services/planes.js";
-
-const WHATSAPP = "573103982286";
-
-/**
- * El nombre del plan viene de la base de datos: va codificado dentro del
- * parámetro `text`, nunca como parte de la ruta, así que no puede cambiar el
- * destino del enlace.
- *
- * @param {string} nombrePlan
- * @returns {string}
- */
-function enlaceWhatsapp(nombrePlan) {
-  const mensaje = `Hola, me interesa el plan ${nombrePlan} de Fuerza Delta 💪`;
-  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
-}
 
 /**
  * @param {import("../domain/plan.js").Plan} plan
@@ -36,7 +22,7 @@ function crearTarjeta(plan) {
         clase: "btn btn--primario",
         texto: "Lo quiero",
         atributos: {
-          href: enlaceWhatsapp(plan.nombre),
+          href: enlaceWhatsapp(`Hola, me interesa el plan ${plan.nombre} de Fuerza Delta 💪`),
           target: "_blank",
           rel: "noopener noreferrer",
         },

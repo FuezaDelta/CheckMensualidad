@@ -2,7 +2,7 @@
  * Modelo y reglas de negocio de una membresía.
  */
 
-import { aDate, esMismoDiaOPosterior } from "./fecha.js";
+import { aDate, diasEntre, esMismoDiaOPosterior } from "./fecha.js";
 
 /** @typedef {"activa"|"vencida"|"desconocido"} Estado */
 
@@ -49,6 +49,22 @@ export function calcularEstado(fechaFin, estadoRegistrado, ahora = new Date()) {
   }
 
   return EstadoMembresia.DESCONOCIDO;
+}
+
+/** Con esta cantidad de días o menos, una membresía activa se avisa como próxima a vencer. */
+export const DIAS_AVISO_VENCIMIENTO = 5;
+
+/**
+ * Días que le quedan a la membresía. Usa la misma regla que `calcularEstado`:
+ * el día del vencimiento todavía cuenta, así que 0 significa "vence hoy" y la
+ * membresía está activa si y solo si el resultado es 0 o más.
+ *
+ * @param {Date|null} fechaFin
+ * @param {Date} [ahora]
+ * @returns {number|null} Negativo: días desde que venció. null si no hay fecha.
+ */
+export function diasRestantes(fechaFin, ahora = new Date()) {
+  return fechaFin ? diasEntre(ahora, fechaFin) : null;
 }
 
 /**

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { aDate, diaCalendario, esMismoDiaOPosterior } from "../js/domain/fecha.js";
+import { aDate, diaCalendario, diasEntre, esMismoDiaOPosterior } from "../js/domain/fecha.js";
 
 describe("aDate", () => {
   it("acepta un Timestamp de Firestore", () => {
@@ -18,6 +18,14 @@ describe("aDate", () => {
     assert.equal(aDate("2026-08-14T10:00:00Z")?.toISOString(), "2026-08-14T10:00:00.000Z");
     assert.equal(aDate(0)?.getTime(), 0);
     assert.equal(aDate(new Date(0))?.getTime(), 0);
+  });
+
+  it("interpreta una fecha sin hora como ese día en Colombia, no en UTC", () => {
+    const fecha = aDate("2026-08-14");
+    assert.equal(fecha?.toISOString(), "2026-08-14T05:00:00.000Z");
+    assert.equal(diaCalendario(/** @type {Date} */ (fecha)), "2026-08-14");
+    assert.equal(esMismoDiaOPosterior(/** @type {Date} */ (fecha), new Date("2026-08-15T04:59:00Z")), true);
+    assert.equal(aDate("2026-02-30"), null);
   });
 
   it("devuelve null cuando el valor no representa una fecha", () => {
@@ -46,5 +54,19 @@ describe("esMismoDiaOPosterior", () => {
 
   it("deja de ser vigente a partir del día siguiente", () => {
     assert.equal(esMismoDiaOPosterior(vencimiento, new Date("2026-08-15T05:00:00Z")), false);
+  });
+});
+
+describe("diasEntre", () => {
+  it("cuenta días de calendario en Colombia, no horas", () => {
+    // Lunes 23:59 y martes 00:01 en Bogotá: un día de diferencia.
+    assert.equal(diasEntre(new Date("2026-08-11T04:59:00Z"), new Date("2026-08-11T05:01:00Z")), 1);
+    // El mismo día en Bogotá aunque en UTC ya sea el siguiente.
+    assert.equal(diasEntre(new Date("2026-08-14T12:00:00Z"), new Date("2026-08-15T02:00:00Z")), 0);
+  });
+
+  it("es negativo hacia atrás y cruza meses y años", () => {
+    assert.equal(diasEntre(new Date("2026-03-01T15:00:00Z"), new Date("2026-02-27T15:00:00Z")), -2);
+    assert.equal(diasEntre(new Date("2026-12-31T15:00:00Z"), new Date("2027-01-01T15:00:00Z")), 1);
   });
 });
